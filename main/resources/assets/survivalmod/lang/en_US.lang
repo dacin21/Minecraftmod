@@ -1,0 +1,17 @@
+tile.infuserPit.name=Infuser 
+tile.fusionReactor.name=Fusion Reactor
+tile.centrifuge.name=Magnetic Centrifuge
+tile.heatExchanger.name=High Temperature Heat Exchanger
+
+item.dacin_survivalmod_fleshCluster.name=Flesh Cluster
+item.dacin_survivalmod_nenderHeat.name=Blazing Redstone Energy
+item.dacin_survivalmod_solarBreaker.name=ic2.net.error: Null pointer exeption; Energy level over -1/12
+item.dacin_survivalmod_doomBlade.name=Doom Blade
+item.dacin_survivalmod_runicStaff.name=Runic Staff
+item.dacin_survivalmod_runicStaffIcon.name=Icon of Rune (only used to register Icon of Runic Staff Projectile)
+item.dacin_survivalmod_hydrogenCell.name=Hydrogen Cell
+item.dacin_survivalmod_deuteriumCell.name=Deuterium Cell
+item.dacin_survivalmod_tritiumCell.name=Tritium Cell
+
+entity.survivalmod.Math.name=Math
+container.HeatExchanger.name=Heat Exchanger
