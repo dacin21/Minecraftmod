@@ -24,9 +24,9 @@ public class RecipesCentrifuge {
 	}
 	
 	private RecipesCentrifuge(){
-		this.addRecipe(2, IC2Items.getItem("electrolyzedWaterCell"), new ItemStack(IC2Items.getItem("cell").getItem(), 2) , 1 ,new ItemStack(survivalmod.hydrogenCell, 2) , 1, new ItemStack(survivalmod.deuteriumCell, 2), 0.1f);
-		this.addRecipe(1, new ItemStack(survivalmod.hydrogenCell), new ItemStack(IC2Items.getItem("cell").getItem(), 1), 1, new ItemStack(survivalmod.deuteriumCell, 1), 1, new ItemStack(survivalmod.tritiumCell, 1), 0.1f);
-		this.addRecipe(1, new ItemStack(survivalmod.deuteriumCell), new ItemStack(IC2Items.getItem("cell").getItem(), 1) , 1 ,new ItemStack(survivalmod.hydrogenCell, 1) , 2, new ItemStack(survivalmod.tritiumCell, 1), 1f);
+		this.addRecipe(2, IC2Items.getItem("electrolyzedWaterCell"), new ItemStack(IC2Items.getItem("cell").getItem(), 2) , 1 ,new ItemStack(survivalmod.hydrogenCell, 4) , 1, new ItemStack(survivalmod.deuteriumCell, 4), 0.1f);
+		this.addRecipe(2, new ItemStack(survivalmod.hydrogenCell), new ItemStack(IC2Items.getItem("cell").getItem(), 1), 1, new ItemStack(survivalmod.deuteriumCell, 2), 1, new ItemStack(survivalmod.tritiumCell, 2), 0.1f);
+		this.addRecipe(2, new ItemStack(survivalmod.deuteriumCell), new ItemStack(IC2Items.getItem("cell").getItem(), 1) , 1 ,new ItemStack(survivalmod.hydrogenCell, 2) , 2, new ItemStack(survivalmod.tritiumCell, 2), 1f);
 	}
 	
 	public void addRecipe(int inputSize, ItemStack input, ItemStack r1, float c1, ItemStack r2, float c2, ItemStack r3, float c3)

@@ -41,6 +41,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @Mod(modid=survivalmod.modid, name="dacin_survivalmod", version="1.0.0")
 
@@ -105,25 +107,24 @@ public class survivalmod {
 	    @EventHandler // used in 1.6.2
 	    public void postInit(FMLPostInitializationEvent event) {
 	    	steam = FluidRegistry.getFluid("steam");
-	    	int a = 0;
 	    }
 	    
 	    
 	    
 	    
 	    private void doItems(){
-	    	fleshCluster= new GenericItem("fleshCluster").setMaxStackSize(64).setCreativeTab(CreativeTabs.tabMisc).setTextureName("survivalmod:fleshCluster");
+	    	fleshCluster= new GenericItem("fleshCluster").setMaxStackSize(64).setCreativeTab(tabDacin).setTextureName("survivalmod:fleshCluster");
 	  		
 	
-	  		nenderHeat= new GenericItem("nenderHeat").setMaxStackSize(1).setCreativeTab(CreativeTabs.tabMisc).setTextureName("survivalmod:nenderHeat");
+	  		nenderHeat= new GenericItem("nenderHeat").setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:nenderHeat");
 	  		
-	  		solarBreaker= new GenericItem("solarBreaker").setMaxStackSize(64).setCreativeTab(CreativeTabs.tabMisc).setTextureName("survivalmod:solarBreaker");
+	  		solarBreaker= new GenericItem("solarBreaker").setMaxStackSize(64).setCreativeTab(tabDacin).setTextureName("survivalmod:solarBreaker");
 	  		
 	  		
-	  		doomBlade= new DmSword(DoomTool).setMaxStackSize(1).setCreativeTab(CreativeTabs.tabCombat).setTextureName("survivalmod:doomBlade");
+	  		doomBlade= new DmSword(DoomTool).setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:doomBlade");
 	  		
-	  		runicStaff = new RunicStaff("runicStaff").setMaxStackSize(1).setCreativeTab(CreativeTabs.tabCombat).setTextureName("survivalmod:runicStaff");
-	  		runicStaffIcon= new GenericItem("runicStaffIcon").setMaxStackSize(1).setCreativeTab(CreativeTabs.tabMisc).setTextureName("survivalmod:runicStaffIcon");
+	  		runicStaff = new RunicStaff("runicStaff").setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:runicStaff");
+	  		runicStaffIcon= new GenericItem("runicStaffIcon").setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:runicStaffIcon");
 	  	   
 
 	  		hydrogenCell = new GasCell("hydrogenCell").setTextureName("survivalmod:hydrogenCell");
@@ -147,7 +148,7 @@ public class survivalmod {
 	   
 	 
 	   private void doBlocks(){
-		   infuserPit= new BlockInfuser().setHardness(2.0F).setStepSound(Block.soundTypeAnvil).setBlockName("infuserPit").setCreativeTab(CreativeTabs.tabBlock).setResistance(10.0F).setBlockTextureName("survivalmod:infuserPit");
+		   infuserPit= new BlockInfuser().setHardness(2.0F).setStepSound(Block.soundTypeAnvil).setBlockName("infuserPit").setCreativeTab(tabDacin).setResistance(10.0F).setBlockTextureName("survivalmod:infuserPit");
 		   GameRegistry.registerBlock(infuserPit, "infuserPit");
 		   
 		   GameRegistry.addRecipe(new ItemStack(infuserPit), "w w", "xzx", "xyx",
@@ -155,20 +156,20 @@ public class survivalmod {
 		   
 		   
 		   
-		   centrifuge = new BlockCentrifuge().setHardness(1.0F).setStepSound(Block.soundTypeWood).setBlockName("centrifuge").setCreativeTab(CreativeTabs.tabBlock).setResistance(10.0F);
+		   centrifuge = new BlockCentrifuge().setHardness(1.0F).setStepSound(Block.soundTypeWood).setBlockName("centrifuge").setCreativeTab(tabDacin).setResistance(10.0F);
 		   GameRegistry.registerBlock(centrifuge, "centrifuge");
 		   GameRegistry.registerTileEntity(TileCentrifuge.class, modid + ".entity.centrifuge");
 		   
-		   fusionReactor = new BlockFusionReactor().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("fusionReactor").setCreativeTab(CreativeTabs.tabBlock).setResistance(100.0F);
+		   fusionReactor = new BlockFusionReactor().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("fusionReactor").setCreativeTab(tabDacin).setResistance(100.0F);
 		   GameRegistry.registerBlock(fusionReactor, "fusionReaktor");
 		   GameRegistry.registerTileEntity(TileFusionReactor.class, modid + ".entity.fusionReaktor");
 		   
-		   heatExchanger = new BlockHeatExchanger().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("heatExchanger").setCreativeTab(CreativeTabs.tabBlock).setResistance(100.0F);
+		   heatExchanger = new BlockHeatExchanger().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("heatExchanger").setCreativeTab(tabDacin).setResistance(100.0F);
 		   GameRegistry.registerBlock(heatExchanger, "heatExchanger");
 		   GameRegistry.registerTileEntity(TileHeatExchanger.class, modid + ".entity.heatExchanger");
 		   
 
-		   neutronBoiler = new BlockNeutronBoiler().setHardness(20.0F).setStepSound(Block.soundTypeAnvil).setBlockName("neutronBoiler").setCreativeTab(CreativeTabs.tabBlock).setResistance(100.0F).setBlockTextureName("survivalmod:neutronBoiler");
+		   neutronBoiler = new BlockNeutronBoiler().setHardness(20.0F).setStepSound(Block.soundTypeAnvil).setBlockName("neutronBoiler").setCreativeTab(tabDacin).setResistance(100.0F).setBlockTextureName("survivalmod:neutronBoiler");
 		   GameRegistry.registerBlock(neutronBoiler, "neutronBoiler");
 
 	  		GameRegistry.addRecipe(new ItemStack(this.heatExchanger), "aza", "yxy", "bbb", 
@@ -177,7 +178,7 @@ public class survivalmod {
 	  		GameRegistry.addRecipe(new ItemStack(this.centrifuge), "wzw", "xyx", " z ",
 	  				'x', IC2Items.getItem("extractor"), 'y', IC2Items.getItem("advancedMachine"), 'z', IC2Items.getItem("advancedAlloy"), 'w', IC2Items.getItem("elemotor"));
 	  		
-	  		steamDistributor = new BlockSteamDistributor().setHardness(20.0F).setStepSound(Block.soundTypeAnvil).setBlockName("steamDistributor").setCreativeTab(CreativeTabs.tabBlock).setResistance(100.0F).setBlockTextureName("survivalmod:steamDistributor");
+	  		steamDistributor = new BlockSteamDistributor().setHardness(20.0F).setStepSound(Block.soundTypeAnvil).setBlockName("steamDistributor").setCreativeTab(tabDacin).setResistance(100.0F).setBlockTextureName("survivalmod:steamDistributor");
 	  		GameRegistry.registerBlock(steamDistributor, "steamDistributor");
 	  		GameRegistry.registerTileEntity(TileSteamDistributor.class, modid + ".entity.steamDistributor");
 	   }
@@ -209,23 +210,20 @@ public class survivalmod {
 	 		    map.put(EntityRune.class, new RenderRunic(runicStaffIcon));
 	 	 }
 	   
+	   public static CreativeTabs tabDacin = new CreativeTabs("DacinMod") {
+			@Override
+		    public ItemStack getIconItemStack() {
+		        return new ItemStack(fusionReactor, 1, 0);
+		    }
+			@Override
+	        @SideOnly(Side.CLIENT)
+			public Item getTabIconItem() {
+				return Item.getItemFromBlock(fusionReactor);
+			}
+		};
 	   
 	   
 	   
 }
 
 		
-
-
-
-
-
-
-
-
-
-
-
-
-
-

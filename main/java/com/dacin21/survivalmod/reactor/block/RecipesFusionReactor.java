@@ -17,14 +17,15 @@ import com.dacin21.survivalmod.tileentityblock.recipe.ResultCentrifuge;
 public class RecipesFusionReactor {
 	
 	public static final RecipesFusionReactor fusionBase = new RecipesFusionReactor();
-	private final float multiplier = 128.0f * 2 * 28; //2 mb Steam = 1 Eu
+	private final float multiplier = 8000.0f;
+	//private final float multiplier = 128.0f * 2 * 28;
 	private Map fusionList = new HashMap();
 
 	private RecipesFusionReactor() {
 		ItemStack emptyCell = IC2Items.getItem("cell");
-		addRecipe(new ItemStack(survivalmod.deuteriumCell), new ItemStack(survivalmod.deuteriumCell),new ItemStack(survivalmod.tritiumCell), emptyCell, 0.95f );
-		addRecipe(new ItemStack(survivalmod.deuteriumCell), new ItemStack(survivalmod.tritiumCell),emptyCell, emptyCell, 1.0f );
-		addRecipe(new ItemStack(survivalmod.tritiumCell), new ItemStack(survivalmod.deuteriumCell),emptyCell, emptyCell, 1.0f );
+		addRecipe(new ItemStack(survivalmod.deuteriumCell), new ItemStack(survivalmod.deuteriumCell),new ItemStack(survivalmod.tritiumCell), null, 0.75f );
+		addRecipe(new ItemStack(survivalmod.deuteriumCell), new ItemStack(survivalmod.tritiumCell),emptyCell, null, 1.0f );
+		addRecipe(new ItemStack(survivalmod.tritiumCell), new ItemStack(survivalmod.deuteriumCell),emptyCell, null, 1.0f );
 	}
 	
 	public void addRecipe(ItemStack input1,ItemStack input2,ItemStack output1,ItemStack output2, float fuelBurnTimeUnscaled)

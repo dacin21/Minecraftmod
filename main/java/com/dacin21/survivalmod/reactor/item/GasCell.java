@@ -25,7 +25,7 @@ public class GasCell extends Item {
 		setUnlocalizedName(survivalmod.modid+ "_" + unlocalizedName);
 		GameRegistry.registerItem(this, survivalmod.modid+ "_" + unlocalizedName);
 		this.setMaxStackSize(64);
-		this.setCreativeTab(CreativeTabs.tabMisc);
+		this.setCreativeTab(survivalmod.tabDacin);
 		Recipes.extractor.addRecipe(new RecipeInputItemStack(new ItemStack(this)), null, IC2Items.getItem("cell"));
 	}
 	

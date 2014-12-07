@@ -61,7 +61,7 @@ public class TileCentrifuge extends TileEntity implements IInventory, ISidedInve
      */
 	@Override
 	public int getSizeInventory() {
-		return this.chestContents.length;
+		return 8;
 	}
 
     /**
@@ -191,7 +191,7 @@ public class TileCentrifuge extends TileEntity implements IInventory, ISidedInve
 
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
-		return p_94041_1_ == 0 ? RecipesFusionReactor.isFuel(p_94041_2_) : (p_94041_1_ == 1 ? RecipesFusionReactor.isFuel(p_94041_2_) : p_94041_1_ == 5 ? p_94041_2_.isItemEqual(IC2Items.getItem("overclockerUpgrade")):true);
+		return p_94041_1_ == 0 ? (RecipesCentrifuge.centrifuge().getCentrifugeResult(p_94041_2_) != null) : (p_94041_1_ == 1 ? RecipesFusionReactor.isFuel(p_94041_2_) : p_94041_1_ == 5 ? p_94041_2_.isItemEqual(IC2Items.getItem("overclockerUpgrade")):true);
 	}
 	
 
@@ -221,7 +221,6 @@ public class TileCentrifuge extends TileEntity implements IInventory, ISidedInve
     public void readFromNBT(NBTTagCompound p_145839_1_)
     {
         super.readFromNBT(p_145839_1_);
-        NBTTagList nbttaglist = p_145839_1_.getTagList("Items", 10);
         this.chestContents = new ItemStack[this.getSizeInventory()];
 
         if (p_145839_1_.hasKey("CustomName", 8))
@@ -229,10 +228,11 @@ public class TileCentrifuge extends TileEntity implements IInventory, ISidedInve
             this.customName = p_145839_1_.getString("CustomName");
         }
 
+        NBTTagList nbttaglist = p_145839_1_.getTagList("ItemsCentrifuge", 10);
         for (int i = 0; i < nbttaglist.tagCount(); ++i)
         {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-            int j = nbttagcompound1.getByte("Slot") & 255;
+            int j = nbttagcompound1.getByte("SlotCentrifuge") & 255;
 
             if (j >= 0 && j < this.chestContents.length)
             {
@@ -255,20 +255,21 @@ public class TileCentrifuge extends TileEntity implements IInventory, ISidedInve
         p_145841_1_.setShort("overclock", (short)this.overclockerCount);
         p_145841_1_.setShort("transformer", (short)this.transformerCount);
         p_145841_1_.setShort("storage", (short)this.storageCount);
+        
         NBTTagList nbttaglist = new NBTTagList();
-
-        for (int i = 0; i < this.chestContents.length; ++i)
+        for (int i = 0; i < this.getSizeInventory(); ++i)
         {
-            if (this.chestContents[i] != null)
+        	ItemStack itemstack = getStackInSlot(i);
+            if (itemstack != null)
             {
                 NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                nbttagcompound1.setByte("Slot", (byte)i);
-                this.chestContents[i].writeToNBT(nbttagcompound1);
+                nbttagcompound1.setByte("SlotCentrifuge", (byte)i);
+                itemstack.writeToNBT(nbttagcompound1);
                 nbttaglist.appendTag(nbttagcompound1);
             }
         }
 
-        p_145841_1_.setTag("Items", nbttaglist);
+        p_145841_1_.setTag("ItemsCentrifuge", nbttaglist);
 
         if (this.hasCustomInventoryName())
         {
@@ -278,11 +279,14 @@ public class TileCentrifuge extends TileEntity implements IInventory, ISidedInve
     
     public void updateEntity()
     {
+    	super.updateEntity();
     	getDescriptionPacket();
-    	if(!icInitialized){
-    		MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-    		icInitialized=true;
-    	}
+		if(!this.worldObj.isRemote){
+	    	if(!icInitialized){
+	    		MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+	    		icInitialized=true;
+	    	}
+		}
         boolean flag = this.EnergyBuffer > 0;
         boolean flag1 = false;
 
@@ -293,7 +297,9 @@ public class TileCentrifuge extends TileEntity implements IInventory, ISidedInve
 
                 if (this.isBurning() && this.canSmelt())
                 {
-                    this.furnaceCookTime += Math.pow(0.7, -overclockerCount);
+                	checkUpgrades();
+                    //this.furnaceCookTime += Math.pow(0.7, -overclockerCount);
+                    this.furnaceCookTime += Math.pow(0.62, -overclockerCount);
                     this.EnergyBuffer-= this.energyConsumtion * Math.pow(1.6, overclockerCount);
 
                     if (this.furnaceCookTime > maxCookTime)
@@ -314,10 +320,6 @@ public class TileCentrifuge extends TileEntity implements IInventory, ISidedInve
 	       			 this.validate();
 	       		 }
             }
-            
-            
-           
-
            
         }
         //TODO: make more efficient
@@ -401,10 +403,10 @@ public class TileCentrifuge extends TileEntity implements IInventory, ISidedInve
 		 return p_102008_3_ != 0 || p_102008_1_ != 1 || p_102008_2_.getItem() == Items.bucket;
 	}
 	
-	static{
+	/*static{
 		addMapping(TileCentrifuge.class, "Centrifuge");
 		
-	}
+	}*/
 	
 	@Override
 	public Packet getDescriptionPacket()
@@ -459,8 +461,12 @@ public class TileCentrifuge extends TileEntity implements IInventory, ISidedInve
 	public double injectEnergy(ForgeDirection directionFrom, double amount,
 			double voltage) {
 		this.EnergyBuffer+= amount;
-		if(this.EnergyBuffer > this.maxEnergyBuffer) this.EnergyBuffer = this.maxEnergyBuffer;
-		System.out.println("Got" + amount + "Eu");
+		double filled;
+		if((filled =  this.EnergyBuffer - this.maxEnergyBuffer)>0){
+			this.EnergyBuffer = this.maxEnergyBuffer;
+			return amount - filled;
+		}
+		//System.out.println("Got" + amount + "Eu");
 		return 0;
 	}
 	

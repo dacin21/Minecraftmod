@@ -2,6 +2,8 @@ tile.infuserPit.name=Infuser
 tile.fusionReactor.name=Fusion Reactor
 tile.centrifuge.name=Magnetic Centrifuge
 tile.heatExchanger.name=High Temperature Heat Exchanger
+tile.neutronBoiler.name=Neutron Absorbing Boiler
+tile.steamDistributor.name=Enderthermic Steam Transportator
 
 item.dacin_survivalmod_fleshCluster.name=Flesh Cluster
 item.dacin_survivalmod_nenderHeat.name=Blazing Redstone Energy
@@ -12,6 +14,8 @@ item.dacin_survivalmod_runicStaffIcon.name=Icon of Rune (only used to register I
 item.dacin_survivalmod_hydrogenCell.name=Hydrogen Cell
 item.dacin_survivalmod_deuteriumCell.name=Deuterium Cell
 item.dacin_survivalmod_tritiumCell.name=Tritium Cell
+itemGroup.DacinMod=Dacin's Mod
 
 entity.survivalmod.Math.name=Math
 container.HeatExchanger.name=Heat Exchanger
+container.Fusionreaktor.name=Fusion Reactor

@@ -23,26 +23,27 @@ public class ContainerCentrifuge extends Container {
         int j;
         int k;
         //chest
-        this.addSlotToContainer(new Slot(p_i1806_2_, 0, 20, 17));
-        this.addSlotToContainer(new Slot(p_i1806_2_, 1, 20, 53));
-        this.addSlotToContainer(new SlotResult(p_i1806_2_, 2, 74 , 53));
-        this.addSlotToContainer(new SlotResult(p_i1806_2_, 3, 92 , 53));
-        this.addSlotToContainer(new SlotResult(p_i1806_2_, 4, 110 , 53));
-        this.addSlotToContainer(new SlotUpgrade(p_i1806_2_, 5, 146 , 17));
-        this.addSlotToContainer(new SlotUpgrade(p_i1806_2_, 6, 146 , 35));
-        this.addSlotToContainer(new SlotUpgrade(p_i1806_2_, 7, 146 , 53));
+        int minIndex = /*2*9+9*/ 0;
+        this.addSlotToContainer(new Slot(p_i1806_2_, minIndex + 0, 20, 17));
+        this.addSlotToContainer(new Slot(p_i1806_2_, minIndex + 1, 20, 53));
+        this.addSlotToContainer(new SlotResult(p_i1806_2_, minIndex + 2, 74 , 53));
+        this.addSlotToContainer(new SlotResult(p_i1806_2_, minIndex + 3, 92 , 53));
+        this.addSlotToContainer(new SlotResult(p_i1806_2_, minIndex + 4, 110 , 53));
+        this.addSlotToContainer(new Slot/*Upgrade*/(p_i1806_2_, minIndex + 5, 146 , 17));
+        this.addSlotToContainer(new Slot/*Upgrade*/(p_i1806_2_, minIndex + 6, 146 , 35));
+        this.addSlotToContainer(new Slot/*Upgrade*/(p_i1806_2_, minIndex + 7, 146 , 53));
         //inventory
         for (j = 0; j < 3; ++j)
         {
             for (k = 0; k < 9; ++k)
             {
-                this.addSlotToContainer(new Slot(p_i1806_1_, k + j * 9 + 9, 8 + k * 18, 103 + j * 18 + i));
+                this.addSlotToContainer(new Slot(p_i1806_1_,k + j * 9 + 9, 8 + k * 18, 103 + j * 18 + i));
             }
         }
         //hotbar
         for (j = 0; j < 9; ++j)
         {
-            this.addSlotToContainer(new Slot(p_i1806_1_, j, 8 + j * 18, 161 + i));
+            this.addSlotToContainer(new Slot(p_i1806_1_,  j, 8 + j * 18, 161 + i));
         }
     }
 

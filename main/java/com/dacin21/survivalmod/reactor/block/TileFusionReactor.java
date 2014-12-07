@@ -31,7 +31,7 @@ public class TileFusionReactor extends TileEntity implements ISidedInventory {
 		complete = false;
 		frameCounter = 0;
 		energyOutput = 0;
-		maxFuelBurnTime = 100;
+		maxFuelBurnTime = 20*30;
 	}
 	
 	@Override
@@ -315,7 +315,7 @@ public class TileFusionReactor extends TileEntity implements ISidedInventory {
 			check(x + blockpos[i]+1, y, z - i, survivalmod.neutronBoiler);
 		}
 
-		//HeatExchangers TODO: finish
+		//HeatExchangers
 		check(x + blockpos[0] + 2 , y , z , survivalmod.heatExchanger);
 		check(x - blockpos[0] - 2 , y , z , survivalmod.heatExchanger);
 		check(x , y , z + blockpos[0] + 2 , survivalmod.heatExchanger);
@@ -449,9 +449,17 @@ public class TileFusionReactor extends TileEntity implements ISidedInventory {
 		--contents[1].stackSize;
 		if(contents[0].stackSize <= 0) contents[0] = null;
 		if(contents[1].stackSize <= 0) contents[1] = null;
-		if(contents[2] == null) contents[2] = result.getFirstStack().copy();
+		if(contents[2] == null){
+			if(result.getFirstStack() != null){
+				contents[2] = result.getFirstStack().copy();
+			}
+		}
 		else contents[2].stackSize+=result.getFirstStack().stackSize;
-		if(contents[3] == null) contents[3] = result.getSecondStack().copy();
+		if(contents[3] == null){
+			if(result.getSecondStack() != null){
+				contents[3] = result.getSecondStack().copy();
+			}
+		}
 		else contents[3].stackSize+=result.getSecondStack().stackSize;
 		
 		this.fuelBurnTime = this.maxFuelBurnTime;

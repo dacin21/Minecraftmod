@@ -20,6 +20,8 @@ public class GuiSteamDistributor extends GuiContainer
     private TileSteamDistributor tileDistributor;
     private ContainerSteamDistributor containerDistributor;
     private static final String __OBFID = "CL_00000758";
+    
+    private static final int GUIYOFFSET = 7;
 
     public GuiSteamDistributor(InventoryPlayer p_i1091_1_, TileSteamDistributor p_i1091_2_)
     {
@@ -32,17 +34,17 @@ public class GuiSteamDistributor extends GuiContainer
     	super.initGui();
 	    int posX = (this.width - this.xSize) / 2;
 		int posY = (this.height - this.ySize) / 2;
-		this.buttonList.add(new GuiButton(0, posX + 10, posY + 10, 20, 20, "x++"));
-		this.buttonList.add(new GuiButton(1, posX + 10, posY + 40, 20, 20, "x--"));
+		this.buttonList.add(new GuiButton(0, posX + 10, posY + 10 + GUIYOFFSET, 20, 20, "x++"));
+		this.buttonList.add(new GuiButton(1, posX + 10, posY + 40 + GUIYOFFSET, 20, 20, "x--"));
 
-		this.buttonList.add(new GuiButton(2, posX + 40, posY + 10, 20, 20, "y++"));
-		this.buttonList.add(new GuiButton(3, posX + 40, posY + 40, 20, 20, "y--"));
+		this.buttonList.add(new GuiButton(2, posX + 40, posY + 10 + GUIYOFFSET, 20, 20, "y++"));
+		this.buttonList.add(new GuiButton(3, posX + 40, posY + 40 + GUIYOFFSET, 20, 20, "y--"));
 
-		this.buttonList.add(new GuiButton(4, posX + 70, posY + 10, 20, 20, "z++"));
-		this.buttonList.add(new GuiButton(5, posX + 70, posY + 40, 20, 20, "z--"));
+		this.buttonList.add(new GuiButton(4, posX + 70, posY + 10 + GUIYOFFSET, 20, 20, "z++"));
+		this.buttonList.add(new GuiButton(5, posX + 70, posY + 40 + GUIYOFFSET, 20, 20, "z--"));
 		
-		this.buttonList.add(new GuiButton(6, posX + 110, posY + 10, 50, 20, "Boiler Direction"));
-		this.buttonList.add(new GuiButton(7, posX + 110, posY + 40, 50, 20, "Fill Direction"));
+		this.buttonList.add(new GuiButton(6, posX + 110, posY + 10 + GUIYOFFSET, 50, 20, "Boiler Direction"));
+		this.buttonList.add(new GuiButton(7, posX + 110, posY + 40 + GUIYOFFSET, 50, 20, "Fill Direction"));
     }
     
     @Override
@@ -73,15 +75,15 @@ public class GuiSteamDistributor extends GuiContainer
         this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
         
         //Button variables
-        this.fontRendererObj.drawString(I18n.format(String.valueOf(this.tileDistributor.xCoord + this.tileDistributor.xOff), new Object[0]), (this.width - this.xSize) / 2 + 10, (this.height - this.ySize) / 2 + 30, 4210752);
+        this.fontRendererObj.drawString(I18n.format(String.valueOf(this.tileDistributor.xCoord + this.tileDistributor.xOff), new Object[0]), (this.width - this.xSize) / 2 + 10, (this.height - this.ySize) / 2 + 30 + GUIYOFFSET, 4210752);
 
-        this.fontRendererObj.drawString(I18n.format(String.valueOf(this.tileDistributor.yCoord + this.tileDistributor.yOff), new Object[0]), (this.width - this.xSize) / 2 + 40, (this.height - this.ySize) / 2 + 30, 4210752);
+        this.fontRendererObj.drawString(I18n.format(String.valueOf(this.tileDistributor.yCoord + this.tileDistributor.yOff), new Object[0]), (this.width - this.xSize) / 2 + 40, (this.height - this.ySize) / 2 + 30 + GUIYOFFSET, 4210752);
 
-        this.fontRendererObj.drawString(I18n.format(String.valueOf(this.tileDistributor.zCoord + this.tileDistributor.zOff), new Object[0]), (this.width - this.xSize) / 2 + 70, (this.height - this.ySize) / 2 + 30, 4210752);
+        this.fontRendererObj.drawString(I18n.format(String.valueOf(this.tileDistributor.zCoord + this.tileDistributor.zOff), new Object[0]), (this.width - this.xSize) / 2 + 70, (this.height - this.ySize) / 2 + 30 + GUIYOFFSET, 4210752);
 
-        this.fontRendererObj.drawString(I18n.format(this.tileDistributor.directionIn.toString(), new Object[0]), (this.width - this.xSize) / 2 + 100, (this.height - this.ySize) / 2 + 30, 4210752);
+        this.fontRendererObj.drawString(I18n.format(this.tileDistributor.directionIn.toString(), new Object[0]), (this.width - this.xSize) / 2 + 100, (this.height - this.ySize) / 2 + 30 + GUIYOFFSET, 4210752);
         
-        this.fontRendererObj.drawString(I18n.format(this.tileDistributor.directionFillOut.toString(), new Object[0]), (this.width - this.xSize) / 2 + 100, (this.height - this.ySize) / 2 + 60, 4210752);
+        this.fontRendererObj.drawString(I18n.format(this.tileDistributor.directionFillOut.toString(), new Object[0]), (this.width - this.xSize) / 2 + 100, (this.height - this.ySize) / 2 + 60 + GUIYOFFSET, 4210752);
     }
 }
 
