@@ -14,6 +14,9 @@ import com.dacin21.survivalmod.reactor.block.GuiSteamDistributor;
 import com.dacin21.survivalmod.reactor.block.TileFusionReactor;
 import com.dacin21.survivalmod.reactor.block.TileHeatExchanger;
 import com.dacin21.survivalmod.reactor.block.TileSteamDistributor;
+import com.dacin21.survivalmod.reactor.reactor.ContainerFusionReactor2;
+import com.dacin21.survivalmod.reactor.reactor.GuiFusionReactor2;
+import com.dacin21.survivalmod.reactor.reactor.TileFusionReactor2;
 import com.dacin21.survivalmod.tileentityblock.ContainerCentrifuge;
 import com.dacin21.survivalmod.tileentityblock.GuiCentrifuge;
 import com.dacin21.survivalmod.tileentityblock.TileCentrifuge;
@@ -34,6 +37,7 @@ public class GuiHandlerInfuser implements IGuiHandler
                     case 2: return id == 2 && world.getBlock(x, y, z) == survivalmod.centrifuge ?  new ContainerCentrifuge(player.inventory,(TileCentrifuge) tile_entity) : null;
                     case 3: return id == 3 && world.getBlock(x, y, z) == survivalmod.heatExchanger ?  new ContainerHeatExchanger(player.inventory,(TileHeatExchanger) tile_entity) : null;
                     case 4: return id == 4 && world.getBlock(x, y, z) == survivalmod.steamDistributor ?  new ContainerSteamDistributor(player.inventory,(TileSteamDistributor) tile_entity) : null;
+                    case 5: return id == 5 && world.getBlock(x, y, z) == survivalmod.fusionReactor2 ? new ContainerFusionReactor2(player.inventory,(TileFusionReactor2) tile_entity) : null;
                     
             }
             return null;
@@ -49,6 +53,7 @@ public class GuiHandlerInfuser implements IGuiHandler
                     case 2: return id == 2 && world.getBlock(x, y, z) == survivalmod.centrifuge ?  new GuiCentrifuge(player.inventory,(TileCentrifuge) world.getTileEntity(x, y, z)) : null;
                     case 3: return id == 3 && world.getBlock(x, y, z) == survivalmod.heatExchanger ?  new GuiHeatExchanger(player.inventory,(TileHeatExchanger) tile_entity) : null;
                     case 4: return id == 4 && world.getBlock(x, y, z) == survivalmod.steamDistributor ?  new GuiSteamDistributor(player.inventory,(TileSteamDistributor) tile_entity) : null;
+                    case 5: return id == 5 && world.getBlock(x, y, z) == survivalmod.fusionReactor2 ? new GuiFusionReactor2(player.inventory, (TileFusionReactor2) world.getTileEntity(x, y, z)) : null;
             }
             return null;
     }

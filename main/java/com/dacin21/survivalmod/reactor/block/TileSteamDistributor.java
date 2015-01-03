@@ -30,7 +30,6 @@ public class TileSteamDistributor extends TileEntity implements ISidedInventory 
 	public TileSteamDistributor() {
 		directionIn = directionFillOut = ForgeDirection.UP;
 		xOff = yOff = zOff = 0;
-		xOff = -2;
 	}
 
 	@Override

@@ -83,7 +83,7 @@ public class GuiSteamDistributor extends GuiContainer
 
         this.fontRendererObj.drawString(I18n.format(this.tileDistributor.directionIn.toString(), new Object[0]), (this.width - this.xSize) / 2 + 100, (this.height - this.ySize) / 2 + 30 + GUIYOFFSET, 4210752);
         
-        this.fontRendererObj.drawString(I18n.format(this.tileDistributor.directionFillOut.toString(), new Object[0]), (this.width - this.xSize) / 2 + 100, (this.height - this.ySize) / 2 + 60 + GUIYOFFSET, 4210752);
+        this.fontRendererObj.drawString(I18n.format(this.tileDistributor.directionFillOut.getOpposite().toString(), new Object[0]), (this.width - this.xSize) / 2 + 100, (this.height - this.ySize) / 2 + 60 + GUIYOFFSET, 4210752);
     }
 }
 
