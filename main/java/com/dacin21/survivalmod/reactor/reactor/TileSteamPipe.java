@@ -87,6 +87,14 @@ public class TileSteamPipe extends TileEntity implements IFluidHandler {
 		return this.masterY != -1;
 	}
 	
+	@Override
+	public void invalidate(){
+		super.invalidate();
+		if(hasMaster()){
+			getMaster().checkForMultiBlock();
+		}
+	}
+	
 	
 	
 	

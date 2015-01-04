@@ -71,7 +71,7 @@ public class TileFusionReactor2 extends TileEntity {
 		fuelBurnupRate = 1;
 		deutTank = new FluidTank(survivalmod.deuteriumPlasma, 0, 10000);
 		triTank = new FluidTank(survivalmod.tritiumPlasma, 0, 10000);
-		steamTank = new FluidTank(survivalmod.steam, 100000, 1000000);
+		steamTank = new FluidTank(survivalmod.steam, 0, 1000000);
 	}
 	
 	@Override
@@ -83,7 +83,7 @@ public class TileFusionReactor2 extends TileEntity {
 			if(complete){
 				burnFuel();
 				this.steamTank.fill(new FluidStack(survivalmod.steam,this.energyOutput), true);
-				this.steamTank.fill(new FluidStack(survivalmod.steam,1000), true);
+				//this.steamTank.fill(new FluidStack(survivalmod.steam,1000), true);
 			}
 	    }
     	getDescriptionPacket();

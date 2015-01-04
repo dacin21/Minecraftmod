@@ -4,6 +4,15 @@ tile.centrifuge.name=Magnetic Centrifuge
 tile.heatExchanger.name=High Temperature Heat Exchanger
 tile.neutronBoiler.name=Neutron Absorbing Boiler
 tile.steamDistributor.name=Enderthermic Steam Transportator
+tile.reactorWall.name=Magnetized Fusion Reactor Block
+tile.fusionReactor2.name=Fusion Reactor Controller
+tile.steamPipe.name=Fusion Reactor Steam Piping
+tile.neutronizer.name=Neutronic Bombarder
+
+tile.hydrogenGas.name=Hydrogen Gas
+tile.deuteriumPlasma.name=Hot Deuterium Plasma
+tile.tritiumPlasma.name=Hot Tritium Plasma
+
 
 item.dacin_survivalmod_fleshCluster.name=Flesh Cluster
 item.dacin_survivalmod_nenderHeat.name=Blazing Redstone Energy

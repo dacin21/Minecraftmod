@@ -83,5 +83,13 @@ public class TileReactorWall extends TileEntity {
 	public boolean hasMaster(){
 		return this.masterY != -1;
 	}
+	
+	@Override
+	public void invalidate(){
+		super.invalidate();
+		if(hasMaster()){
+			getMaster().checkForMultiBlock();
+		}
+	}
 
 }

@@ -34,7 +34,7 @@ public class BlockSteamPipe extends BlockContainer {
     {
         this.blockIcon = par1IconRegister.registerIcon("survivalmod:steam_side");
         this.iconTop = par1IconRegister.registerIcon("survivalmod:steam_top");
-        this.iconBot = par1IconRegister.registerIcon("survivalmod:steam_bot");
+        this.iconBot = par1IconRegister.registerIcon("survivalmod:steam_top"); // top == bot
     }
 	
 	

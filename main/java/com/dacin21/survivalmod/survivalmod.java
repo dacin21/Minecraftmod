@@ -5,6 +5,7 @@ import ic2.api.item.IC2Items;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
@@ -28,6 +29,9 @@ import com.dacin21.survivalmod.reactor.block.TileFusionReactor;
 import com.dacin21.survivalmod.reactor.block.TileHeatExchanger;
 import com.dacin21.survivalmod.reactor.block.TileSteamDistributor;
 import com.dacin21.survivalmod.reactor.item.GasCell;
+import com.dacin21.survivalmod.reactor.producion.BlockHydroFluid;
+import com.dacin21.survivalmod.reactor.producion.BlockNeutronizer;
+import com.dacin21.survivalmod.reactor.producion.TileNeutronizer;
 import com.dacin21.survivalmod.reactor.reactor.BlockFusionReactor2;
 import com.dacin21.survivalmod.reactor.reactor.BlockReactorWall;
 import com.dacin21.survivalmod.reactor.reactor.BlockSteamPipe;
@@ -64,13 +68,14 @@ public class survivalmod {
 	    public static Item runicStaffIcon;
 	    public static ToolMaterial DoomTool;
 	    public static Item hydrogenCell, deuteriumCell, tritiumCell;
-	    public static Fluid deuteriumPlasma, tritiumPlasma;
+	    public static Fluid deuteriumPlasma, tritiumPlasma, hydrogen;
 	    public static Fluid steam;
 	    
 	
 	    
-	    public static Block infuserPit, centrifuge, fusionReactor,  fusionReactor2, reactorWall, heatExchanger, neutronBoiler, steamDistributor, steamPipe;
-	    
+	    public static Block infuserPit, centrifuge, fusionReactor, heatExchanger, neutronBoiler, steamDistributor;
+	    public static Block fusionReactor2, reactorWall, steamPipe, neutronizer;
+	    public static Block hFluidBlock, dFluidBlock, tFluidBlock;
 	    
 	    private static int modEntityID = 0;
 		
@@ -99,6 +104,7 @@ public class survivalmod {
 	        	DoomTool =EnumHelper.addToolMaterial("DoomTool", 5, 3200, 12.0F, 35.0F, 10);
 	    		doItems();
 	    		doBlocks();
+	    		doFluids();
 	    		doMobs();
 	    		
 	    		
@@ -118,11 +124,7 @@ public class survivalmod {
 	    		steam = new Fluid("steam");
 	    		FluidRegistry.registerFluid(steam);
 	    	}
-	    	tritiumPlasma = new Fluid("Tritium_Plasma");
-	    	FluidRegistry.registerFluid(tritiumPlasma);
 	    	
-	    	deuteriumPlasma = new Fluid("Deuterium_Plasma");
-	    	FluidRegistry.registerFluid(deuteriumPlasma);
 	    }
 	    
 	    
@@ -192,6 +194,11 @@ public class survivalmod {
 		   GameRegistry.registerBlock(steamPipe, "steamPipe");
 		   GameRegistry.registerTileEntity(TileSteamPipe.class, modid + ".entity.steamPipe");
 		   
+		   neutronizer = new BlockNeutronizer().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("neutronizer").setCreativeTab(tabDacin).setResistance(100.0F);
+		   GameRegistry.registerBlock(neutronizer,  "neutronizer");
+		   GameRegistry.registerTileEntity(TileNeutronizer.class, modid + ".entity.neutronizer");
+		   
+		   
 		   
 		   heatExchanger = new BlockHeatExchanger().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("heatExchanger").setCreativeTab(tabDacin).setResistance(100.0F);
 		   GameRegistry.registerBlock(heatExchanger, "heatExchanger");
@@ -233,6 +240,24 @@ public class survivalmod {
 			EntityRegistry.registerModEntity(ProjectileMath.class, "ProjectileMath", modEntityID, this, 64, 10, true);
 		   
 			
+	   }
+	   
+	   private void doFluids(){
+			hydrogen = new Fluid("hydrogen").setDensity(1).setGaseous(true);
+			FluidRegistry.registerFluid(hydrogen);
+			hFluidBlock = new BlockHydroFluid(hydrogen, Material.lava).setBlockName("hydrogenGas");
+			GameRegistry.registerBlock(hFluidBlock, "hydrogenGas");
+			
+			tritiumPlasma = new Fluid("tritium_plasma").setDensity(2).setGaseous(true).setTemperature(100000000);
+			FluidRegistry.registerFluid(tritiumPlasma);
+			tFluidBlock = new BlockHydroFluid(tritiumPlasma, Material.lava).setBlockName("tritiumPlasma");
+			GameRegistry.registerBlock(tFluidBlock, "tritiumPlasma");
+			
+			deuteriumPlasma = new Fluid("deuterium_plasma").setDensity(3).setGaseous(true).setTemperature(100000001);
+			FluidRegistry.registerFluid(deuteriumPlasma);
+			dFluidBlock = new BlockHydroFluid(deuteriumPlasma, Material.lava).setBlockName("deuteriumPlasma");
+			GameRegistry.registerBlock(dFluidBlock, "deuteriumPlasma");
+		   
 	   }
 	   
 	   
