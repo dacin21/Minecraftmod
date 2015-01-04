@@ -30,8 +30,10 @@ import com.dacin21.survivalmod.reactor.block.TileSteamDistributor;
 import com.dacin21.survivalmod.reactor.item.GasCell;
 import com.dacin21.survivalmod.reactor.reactor.BlockFusionReactor2;
 import com.dacin21.survivalmod.reactor.reactor.BlockReactorWall;
+import com.dacin21.survivalmod.reactor.reactor.BlockSteamPipe;
 import com.dacin21.survivalmod.reactor.reactor.TileFusionReactor2;
 import com.dacin21.survivalmod.reactor.reactor.TileReactorWall;
+import com.dacin21.survivalmod.reactor.reactor.TileSteamPipe;
 import com.dacin21.survivalmod.tileentityblock.BlockCentrifuge;
 import com.dacin21.survivalmod.tileentityblock.TileCentrifuge;
 
@@ -67,7 +69,7 @@ public class survivalmod {
 	    
 	
 	    
-	    public static Block infuserPit, centrifuge, fusionReactor,  fusionReactor2, reactorWall, heatExchanger, neutronBoiler, steamDistributor;
+	    public static Block infuserPit, centrifuge, fusionReactor,  fusionReactor2, reactorWall, heatExchanger, neutronBoiler, steamDistributor, steamPipe;
 	    
 	    
 	    private static int modEntityID = 0;
@@ -112,6 +114,10 @@ public class survivalmod {
 	    @EventHandler // used in 1.6.2
 	    public void postInit(FMLPostInitializationEvent event) {
 	    	steam = FluidRegistry.getFluid("steam");
+	    	if(steam== null){
+	    		steam = new Fluid("steam");
+	    		FluidRegistry.registerFluid(steam);
+	    	}
 	    	tritiumPlasma = new Fluid("Tritium_Plasma");
 	    	FluidRegistry.registerFluid(tritiumPlasma);
 	    	
@@ -178,10 +184,13 @@ public class survivalmod {
 		   GameRegistry.registerBlock(fusionReactor2, "fusionReaktor2");
 		   GameRegistry.registerTileEntity(TileFusionReactor2.class, modid + ".entity.fusionReaktor2");
 		   
-		   reactorWall = new BlockReactorWall().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("ReactorWall").setCreativeTab(tabDacin).setResistance(100.0F);
+		   reactorWall = new BlockReactorWall().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("reactorWall").setCreativeTab(tabDacin).setResistance(100.0F);
 		   GameRegistry.registerBlock(reactorWall, "reactorWall");
 		   GameRegistry.registerTileEntity(TileReactorWall.class, modid + ".entity.reactorWall");
 		   
+		   steamPipe = new BlockSteamPipe().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("steamPipe").setCreativeTab(tabDacin).setResistance(100.0F);
+		   GameRegistry.registerBlock(steamPipe, "steamPipe");
+		   GameRegistry.registerTileEntity(TileSteamPipe.class, modid + ".entity.steamPipe");
 		   
 		   
 		   heatExchanger = new BlockHeatExchanger().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("heatExchanger").setCreativeTab(tabDacin).setResistance(100.0F);

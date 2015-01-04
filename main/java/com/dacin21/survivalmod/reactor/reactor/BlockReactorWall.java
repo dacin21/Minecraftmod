@@ -1,5 +1,7 @@
 package com.dacin21.survivalmod.reactor.reactor;
 
+import com.dacin21.survivalmod.survivalmod;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -35,9 +37,9 @@ public class BlockReactorWall extends BlockContainer {
     @Override
     public void registerBlockIcons(IIconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon("survivalmod:boiler_side");
-        this.iconTop = par1IconRegister.registerIcon("survivalmod:boiler_top");
-        this.iconBot = par1IconRegister.registerIcon("survivalmod:boiler_bot");
+        this.blockIcon = par1IconRegister.registerIcon("survivalmod:wall_side");
+        this.iconTop = par1IconRegister.registerIcon("survivalmod:wall_top");
+        this.iconBot = par1IconRegister.registerIcon("survivalmod:wall_bot");
     }
 	
 	@Override
@@ -54,8 +56,17 @@ public class BlockReactorWall extends BlockContainer {
         }
         else
         {
-        	int[] mcoords = myTile.getMasterCoords();
-        	return par1World.getBlock(mcoords[0], mcoords[1], mcoords[2]).onBlockActivated(par1World, mcoords[0], mcoords[1], mcoords[2], par5Player, par6, par7, par8, par9);
+        	/*int[] mcoords = myTile.getMasterCoords();
+        	TileFusionReactor2 entity = ((TileFusionReactor2)par1World.getTileEntity(mcoords[0], mcoords[1], mcoords[2]));
+    		if(entity == null) return true;
+    		if(entity.checkCompletion()){
+    			par5Player.openGui(survivalmod.instance,5 , par1World, x, y, z);
+    		} else {
+    			System.err.print("Corrds of uninitialized Master foung! This is a BUG");
+    		}*/
+        	
+        	
+        	return false;
         }
     }
 	

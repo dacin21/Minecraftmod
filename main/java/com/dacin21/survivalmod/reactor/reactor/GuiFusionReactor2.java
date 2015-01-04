@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class GuiFusionReactor2 extends GuiContainer
 {
-    private static final ResourceLocation fusionGuiTextures = new ResourceLocation("survivalmod:textures/gui/FusionReactor.png");
+    private static final ResourceLocation fusionGuiTextures = new ResourceLocation("survivalmod:textures/gui/FusionReactor2.png");
     private TileFusionReactor2 tileFusion;
     private static final String __OBFID = "CL_00000758";
 
@@ -39,6 +39,12 @@ public class GuiFusionReactor2 extends GuiContainer
         int k = (this.width - this.xSize) / 2;
         int l = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
+        //fluidTanks
+        int off = this.tileFusion.getRelDeu() * 54 / 100;
+        this.drawTexturedModalRect(k+37, l+16 + 54-off, 176, 0 + 54-off, 18, off);
+        
+        off = this.tileFusion.getRelTri() * 54 / 100;
+        this.drawTexturedModalRect(k+73, l+16 + 54-off, 194, 0 + 54-off, 18, off);
 
         
     }

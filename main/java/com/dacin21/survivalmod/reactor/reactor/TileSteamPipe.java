@@ -1,16 +1,19 @@
 package com.dacin21.survivalmod.reactor.reactor;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
-public class TileReactorWall extends TileEntity {
+public class TileSteamPipe extends TileEntity implements IFluidHandler {
 	public int masterX, masterY = -1, masterZ;
-	
-	
 	
 	
 	public TileFusionReactor2 getMaster(){
@@ -82,6 +85,52 @@ public class TileReactorWall extends TileEntity {
 	
 	public boolean hasMaster(){
 		return this.masterY != -1;
+	}
+	
+	
+	
+	
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource,
+			boolean doDrain) {
+		if(hasMaster()){
+			return getMaster().steamTank.drain(resource.amount, doDrain);
+		}
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		if(hasMaster()){
+			return getMaster().steamTank.drain(maxDrain, doDrain);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return hasMaster();
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		if(hasMaster()){
+			TileFusionReactor2 master = getMaster();
+			if(master!= null){
+			return new FluidTankInfo[] { master.steamTank.getInfo() };
+			}
+		}
+		return null;
 	}
 
 }

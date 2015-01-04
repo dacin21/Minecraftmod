@@ -17,6 +17,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
 public class TileFusionReactor2 extends TileEntity {
@@ -50,7 +51,16 @@ public class TileFusionReactor2 extends TileEntity {
 		{14,10},{14,9},{15,8},{15,7},
 		{16,7},{16,6},{16,5},{16,4},
 		{17,4},{17,3},{17,2},{17,1}};
-	public FluidTank deutTank, triTank;
+	private static final int[][] steampos = {
+		{0,18},{1,18},{2,18},{3,18},{4,18},
+		{5,17},{6,17},{7,17},
+		{8,16},{9,16},{9,15},{10,15},
+		{11,14},{12,13},{13,13},{13,12},{14,11},
+		{15,10},{15,9},{16,9},{16,8},
+		{17,7},{17,6},{17,5},
+		{18,4},{18,3},{18,2},{18,1}
+	};
+	public FluidTank deutTank, triTank, steamTank;
 	private boolean complete, burning;
 	private int energyOutput;
 	public int fuelBurnupRate;
@@ -61,6 +71,7 @@ public class TileFusionReactor2 extends TileEntity {
 		fuelBurnupRate = 1;
 		deutTank = new FluidTank(survivalmod.deuteriumPlasma, 0, 10000);
 		triTank = new FluidTank(survivalmod.tritiumPlasma, 0, 10000);
+		steamTank = new FluidTank(survivalmod.steam, 100000, 1000000);
 	}
 	
 	@Override
@@ -71,10 +82,19 @@ public class TileFusionReactor2 extends TileEntity {
 			TileNeutronBoiler.count=0;*/
 			if(complete){
 				burnFuel();
+				this.steamTank.fill(new FluidStack(survivalmod.steam,this.energyOutput), true);
+				this.steamTank.fill(new FluidStack(survivalmod.steam,1000), true);
 			}
 	    }
     	getDescriptionPacket();
     }
+	
+	public int getRelTri(){
+		return this.triTank.getFluidAmount() * 100 / this.triTank.getCapacity();
+	}
+	public int getRelDeu(){
+		return this.deutTank.getFluidAmount() * 100 / this.deutTank.getCapacity();
+	}
 	
 
     @Override
@@ -145,6 +165,14 @@ public class TileFusionReactor2 extends TileEntity {
 				break;
 			}
 		}
+		if(complete){
+			for(int i = 69*4*2 + 3*200; i< 69*4*2+3*200 + 112 ; i++){
+				if(!checkBlock(i, survivalmod.steamPipe,-1)){
+					complete = false;
+					break;
+				}
+			}
+		}
 		
 		
 		if(oldComplete!=complete){
@@ -155,6 +183,13 @@ public class TileFusionReactor2 extends TileEntity {
 					if(wall!= null){
 						wall.initFromMaster(this);
 					}
+				}
+				TileSteamPipe pipe = null;
+				for(int i=0;i<112;i++){
+					pipe = getSteamTile(i);
+						if(pipe!= null){
+							pipe.initFromMaster(this);
+						}
 				}
 			} else {
 				this.runMasterUnload();
@@ -167,6 +202,8 @@ public class TileFusionReactor2 extends TileEntity {
 		int x, y,z;
 		y=x=z=0;
 		y+=this.yCoord;
+		x+=this.xCoord;
+		z+=this.zCoord;
 		//layer 0 and 4
 		if(index<69*4*2){
 			if(index>=69*4){
@@ -254,9 +291,56 @@ public class TileFusionReactor2 extends TileEntity {
 		return null;
 	}
 	
+	private int[] getSteamPos(int index){
+		int x, y,z;
+		y=x=z=0;
+		y+=this.yCoord;
+		x+=this.xCoord;
+		z+=this.zCoord;
+		switch(index/28){
+			case 0:
+				x+= steampos[index%28][0];
+				z+= steampos[index%28][1];
+				break;
+			case 1:
+				z-= steampos[index%28][0];
+				x+= steampos[index%28][1];
+				break;
+			case 2:
+				x-= steampos[index%28][0];
+				z-= steampos[index%28][1];
+				break;
+			case 3:
+				z+= steampos[index%28][0];
+				x-= steampos[index%28][1];
+				break;
+			default:
+				System.err.println("!!!invalid index after division!!!");
+		}
+		y+=2;
+		return new int[]{x,y,z};
+	}
+	
+	private TileSteamPipe getSteamTile(int index){
+		int[] pos = getSteamPos(index);
+		if(pos == null) return null;
+		
+		TileEntity steamP = this.worldObj.getTileEntity(pos[0], pos[1], pos[2]);
+		if(steamP != null && steamP instanceof TileSteamPipe){
+			return (TileSteamPipe)steamP;
+		}
+		//System.out.print("Steam Pipe not Found at[" + x + " , " + y + " , " + z + " ]");
+		return null;
+	}
+	
 	private boolean checkBlock(int index, Block block, int metadata){
 		if(index < 0) return false;
-		int[] pos = wallPos(index);
+		int[] pos;
+		if(index < 3*200 + 69*4*2){
+			pos = wallPos(index);
+		} else {
+			pos = getSteamPos(index - (3*200 + 69*4*2));
+		}
 		Block worldBlock = this.worldObj.getBlock(pos[0], pos[1], pos[2]);
 		if(worldBlock == null) return false;
 		if(metadata==-1){
@@ -276,6 +360,13 @@ public class TileFusionReactor2 extends TileEntity {
 			wall = getWallTile(i);
 			if(wall!= null){
 				wall.unloadMaster();;
+			}
+		}
+		TileSteamPipe pipe = null;
+		for(int i = 0;i < 112; i++){
+			pipe = getSteamTile(i);
+			if(pipe!=null){
+				pipe.unloadMaster();
 			}
 		}
 		this.burning = false;
