@@ -18,13 +18,18 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.dacin21.survivalmod.survivalmod;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockTurbineRotorbase extends BlockContainer {
 
 	private Random random = new Random();
 	private IIcon iconTop, iconBot;
+	private static final float pd = 0.6f;//Partice minimum distance from center
 
 	public BlockTurbineRotorbase() {
 		super(Material.iron);
+		this.setTickRandomly(true);
 	}
 
 	@Override
@@ -73,6 +78,66 @@ public class BlockTurbineRotorbase extends BlockContainer {
 		}
 		return true;
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World par1World, int iX, int iY, int iZ, Random par5Random)
+	{
+		TileEntity tile = par1World.getTileEntity(iX,iY,iZ);
+		if(tile!= null && tile instanceof TileTurbineRotorbase){
+			TileTurbineRotorbase base = (TileTurbineRotorbase) tile;
+			if(base.isBurning()){
+				float x = (float) iX + 0.5f;
+				float y = (float)iY + 0.5f;
+				float z = (float)iZ + 0.5f;
+				double speed = par5Random.nextFloat()/5.0F + 0.1F;
+				double plusSpeed = par5Random.nextFloat()/50 + 0.025;
+				int dir = base.getDirection();
+				for(int i = 0; i< 15; i++){
+					speed = par5Random.nextFloat()/5.0F + 0.1F;
+					switch(dir){
+						case 0:
+							par1World.spawnParticle("smoke", x-pd, y, z, -speed/8, 0.0D, speed + plusSpeed*i);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x+pd, y, z, speed/8, 0.0D, speed + plusSpeed*i);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x, y+pd, z, 0.0D, speed/8, speed + plusSpeed*i);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x, y-pd, z, 0.0D, -speed/8, speed + plusSpeed*i);
+							break;
+						case 1:
+							par1World.spawnParticle("smoke", x, y, z-pd, speed + plusSpeed*i, 0.0D, -speed/8);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x, y, z+pd, speed + plusSpeed*i, 0.0D, speed/8);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x, y+pd, z, speed + plusSpeed*i, speed/8, 0.0F);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x, y-pd, z, speed + plusSpeed*i, -speed/8, 0.0F);
+							break;
+						case 2:
+							par1World.spawnParticle("smoke", x-pd, y, z, -speed/8, 0.0D, -speed - plusSpeed*i);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x+pd, y, z, speed/8, 0.0D, -speed - plusSpeed*i);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x, y+pd, z, 0.0D, speed/8, -speed - plusSpeed*i);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x, y-pd, z, 0.0D, -speed/8, -speed - plusSpeed*i);
+							break;
+						case 3:
+							par1World.spawnParticle("smoke", x, y, z-pd, -speed - plusSpeed*i, 0.0D, -speed/8);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x, y, z+pd, -speed - plusSpeed*i, 0.0D, speed/8);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x, y+pd, z, -speed - plusSpeed*i, speed/8, 0.0F);
+							speed = par5Random.nextFloat()/5.0F + 0.1F;
+							par1World.spawnParticle("smoke", x, y-pd, z, -speed - plusSpeed*i, -speed/8, 0.0F);
+							break;
+					}
+				}
+			}
+		}
+	}
+
 
 }
 

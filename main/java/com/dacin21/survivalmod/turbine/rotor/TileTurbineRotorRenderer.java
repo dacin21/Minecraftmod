@@ -30,29 +30,40 @@ public class TileTurbineRotorRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
+		int pushcount = 0;
 		GL11.glPushMatrix();
+		pushcount++;
 		ResourceLocation textures = new ResourceLocation("survivalmod", "textures/entity/Block_Rotor.png");
 		Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 		
 
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
     	GL11.glPushMatrix();
+		pushcount++;
 		int jbase = -1;
 	    if(te!= null && te instanceof TileTurbineRotor){
 	    	TileTurbineRotor tileRotor = (TileTurbineRotor) te;
 	    	if(tileRotor.hasMaster()){
+		    	if(tileRotor.getMaster()!= null && tileRotor.getMaster().isBurning()){
+		    		float rotation = tileRotor.getMaster().frameCounter;
+		    		tileRotor.getMaster().frameCounter++;
+		    		GL11.glRotatef(rotation, 0.0F, 0.0F, 1.0F);
+		    		GL11.glPushMatrix();
+		    		pushcount++;
+		    	}
 		    	GL11.glRotatef(90.0F * tileRotor.direction, 0.0F, 1.0F, 0.0F);
 		    	jbase=4 * tileRotor.pos;
 	    	}
 	    }
 		GL11.glPushMatrix();
+		pushcount++;
 		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F); // upside down fix
 		
 		this.model.render(jbase, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 
-		GL11.glPopMatrix();
-		GL11.glPopMatrix();
-		GL11.glPopMatrix();
+		for(;pushcount>0;pushcount--){
+			GL11.glPopMatrix();
+		}
 	}
 
 	// Set the lighting stuff, so it changes it's brightness properly.

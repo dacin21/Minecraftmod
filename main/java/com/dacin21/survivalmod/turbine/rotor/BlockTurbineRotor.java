@@ -1,6 +1,9 @@
 package com.dacin21.survivalmod.turbine.rotor;
 
+import java.util.Random;
+
 import com.dacin21.survivalmod.survivalmod;
+import com.dacin21.survivalmod.turbine.block.TileTurbineRotorbase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -38,6 +41,9 @@ public class BlockTurbineRotor extends BlockContainer {
     {
         this.blockIcon = par1IconRegister.registerIcon("survivalmod:turbineRotor");
     }
+    
+
+	
 	
 	@Override
 	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5Player, int par6, float par7, float par8, float par9)

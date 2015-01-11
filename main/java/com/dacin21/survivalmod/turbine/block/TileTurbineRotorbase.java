@@ -1,5 +1,7 @@
 package com.dacin21.survivalmod.turbine.block;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -7,26 +9,30 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidTank;
 
 import com.dacin21.survivalmod.survivalmod;
 import com.dacin21.survivalmod.turbine.rotor.TileTurbineRotor;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class TileTurbineRotorbase extends TileEntity {
 	public FluidTank steamTank;
 	private boolean complete, burning;
 	private static final double energyOutput = 100;
-	public int steamConsumtion;
 	public double energyBuffer;
 	private int direction = -1;
+	public float frameCounter = 0.0f;
 	
 	private boolean isUpdateSceduled = false;
 
 	public TileTurbineRotorbase() {
 		complete = false;
-		steamConsumtion = 1;
 		steamTank = new FluidTank(survivalmod.steam, 0, 1000000);
 		energyBuffer = 0;
+		burning = false;
 	}
 	
 	@Override
@@ -39,23 +45,20 @@ public class TileTurbineRotorbase extends TileEntity {
 			}
 			if(complete){
 				burnFuel();
-				if(burning){
-					energyBuffer+=energyOutput;
-				}
-				if(energyBuffer > 10000) energyBuffer = 10000;
 			}
 	    }
     	getDescriptionPacket();
     }
-	
-
     @Override
     public void readFromNBT(NBTTagCompound p_145839_1_)
     {
         super.readFromNBT(p_145839_1_);
-        this.steamConsumtion = p_145839_1_.getInteger("steamConsumtion");
         this.complete = p_145839_1_.getBoolean("complete");
         this.direction = p_145839_1_.getInteger("direction");
+        this.energyBuffer = p_145839_1_.getDouble("energyBuffer");
+        this.burning = p_145839_1_.getBoolean("burning");
+        
+        steamTank.readFromNBT(p_145839_1_);
 
     }
     @Override
@@ -76,9 +79,12 @@ public class TileTurbineRotorbase extends TileEntity {
     public void writeToNBT(NBTTagCompound p_145841_1_)
     {
         super.writeToNBT(p_145841_1_);
-        p_145841_1_.setInteger("SteamConsumtion", this.steamConsumtion);
-        p_145841_1_.setBoolean("Complete", complete);
+        p_145841_1_.setBoolean("complete", complete);
         p_145841_1_.setInteger("direction", direction);
+        p_145841_1_.setDouble("energyBuffer", energyBuffer);
+        
+        p_145841_1_.setBoolean("burning", burning);
+        steamTank.writeToNBT(p_145841_1_);
 
     }
 
@@ -233,6 +239,7 @@ public class TileTurbineRotorbase extends TileEntity {
 		if(checkBlock(survivalmod.turbineFrame, absPos)) return true;
 		if(checkBlock(survivalmod.turbineGlass, absPos)) return true;
 		if(checkBlock(survivalmod.turbinePowerport, absPos)) return true;
+		if(checkBlock(survivalmod.turbineFluidport, absPos)) return true;
 		System.out.println("Block failed at: ( " + absPos[0] + " / " + absPos[1] + " / " + absPos[2] + " ) with Block: " + getBlock(absPos).getLocalizedName() +"(not a turbine Block)");
 		return false;
 	}
@@ -343,6 +350,14 @@ public class TileTurbineRotorbase extends TileEntity {
 		return complete;
 	}
 	
+	public boolean isBurning(){
+		return this.burning;
+	}
+	
+	public int getDirection(){
+		return this.direction;
+	}
+	
 	public double getOutput(){
 		return energyOutput;
 	}
@@ -351,20 +366,20 @@ public class TileTurbineRotorbase extends TileEntity {
 		
 		if (!this.worldObj.isRemote)
         {
-				if(!this.useFuel()){
-					//if(burning) checkForMultiBlock();
-					burning = false;
-				} else if (!burning){
-					burning = true;
-				}
+				burning = this.useFuel();
 			
         }
         this.worldObj.markBlockForUpdate(this.xCoord, yCoord, zCoord);
 	}
 	
 	private boolean useFuel(){
-		if(steamTank.getFluidAmount() < this.steamConsumtion) return false;
-		steamTank.drain(this.steamConsumtion, true);
+		if(steamTank.getFluidAmount() < 100) return false;
+		energyBuffer+=steamTank.drain(10000, true).amount * energyOutput;
+		
+		if(energyBuffer > 1000000){
+			energyBuffer = 1000000;
+		}
+		
 		return true;
 	}
 	

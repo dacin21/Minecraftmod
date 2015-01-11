@@ -139,7 +139,11 @@ public class TileTurbineFluidport extends TileEntity implements IMultiblockTurbi
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return hasMaster() && fluid == survivalmod.steam;
+		if(hasMaster() && getMaster().steamTank != null){
+		//return fluid.getID() == getMaster().steamTank.getFluid().getFluid().getID();
+			return fluid.getID() == survivalmod.steam.getID();
+		}
+		return false;
 	}
 
 	@Override
