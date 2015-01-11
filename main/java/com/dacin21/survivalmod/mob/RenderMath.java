@@ -19,14 +19,14 @@ public class RenderMath extends RenderLiving
         super(par1ModelBase, par2);
     }
 
-    public void RenderMath(EntityMath par1EntityMath, double par2, double par4, double par6, float par8, float par9)
+    public void doRenderMath(EntityMath par1EntityMath, double par2, double par4, double par6, float par8, float par9)
     {
         super.doRender(par1EntityMath, par2, par4, par6, par8, par9);
     }
 
     public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9)
     {
-        this.RenderMath((EntityMath)par1EntityLiving, par2, par4, par6, par8, par9);
+        this.doRenderMath((EntityMath)par1EntityLiving, par2, par4, par6, par8, par9);
     }
 
     /**
@@ -37,7 +37,7 @@ public class RenderMath extends RenderLiving
      */
     public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
     {
-        this.RenderMath((EntityMath)par1Entity, par2, par4, par6, par8, par9);
+        this.doRenderMath((EntityMath)par1Entity, par2, par4, par6, par8, par9);
     }
 
 	@Override
