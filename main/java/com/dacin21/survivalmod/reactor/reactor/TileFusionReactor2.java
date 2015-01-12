@@ -63,12 +63,11 @@ public class TileFusionReactor2 extends TileEntity {
 	public FluidTank deutTank, triTank, steamTank;
 	private boolean complete, burning;
 	private int energyOutput;
-	public int fuelBurnupRate;
+	public static final int fuelBurnupRate = survivalmod.PlasmaCount;
 
 	public TileFusionReactor2() {
 		complete = false;
 		energyOutput = 0;
-		fuelBurnupRate = 1;
 		deutTank = new FluidTank(survivalmod.deuteriumPlasma, 0, 10000);
 		triTank = new FluidTank(survivalmod.tritiumPlasma, 0, 10000);
 		steamTank = new FluidTank(survivalmod.steam, 0, 1000000);
@@ -82,7 +81,9 @@ public class TileFusionReactor2 extends TileEntity {
 			TileNeutronBoiler.count=0;*/
 			if(complete){
 				burnFuel();
-				this.steamTank.fill(new FluidStack(survivalmod.steam,this.energyOutput), true);
+				if(burning){
+					this.steamTank.fill(new FluidStack(survivalmod.steam,this.energyOutput), true);
+				}
 				//this.steamTank.fill(new FluidStack(survivalmod.steam,1000), true);
 			}
 	    }
@@ -102,7 +103,6 @@ public class TileFusionReactor2 extends TileEntity {
     {
         super.readFromNBT(p_145839_1_);
         this.energyOutput = p_145839_1_.getInteger("EnergyOut");
-        this.fuelBurnupRate = p_145839_1_.getInteger("FuelBurnTime");
         this.complete = p_145839_1_.getBoolean("Complete");
         this.deutTank = new FluidTank(survivalmod.deuteriumPlasma, p_145839_1_.getInteger("DeutTankContent"), 10000);
         this.triTank = new FluidTank(survivalmod.tritiumPlasma, p_145839_1_.getInteger("TriTankContent"), 10000);
@@ -127,7 +127,6 @@ public class TileFusionReactor2 extends TileEntity {
     {
         super.writeToNBT(p_145841_1_);
         p_145841_1_.setInteger("EnergyOut", this.energyOutput);
-        p_145841_1_.setInteger("FuelBurnTime", this.fuelBurnupRate);
         p_145841_1_.setBoolean("Complete", complete);
         p_145841_1_.setInteger("DeutTankContent", this.deutTank.getFluidAmount());
         p_145841_1_.setInteger("TriTankContent", this.triTank.getFluidAmount());
@@ -405,22 +404,12 @@ public class TileFusionReactor2 extends TileEntity {
 		if(deutTank.getFluidAmount() < this.fuelBurnupRate) return false;
 		triTank.drain(this.fuelBurnupRate, true);
 		deutTank.drain(this.fuelBurnupRate, true);
-		changeEnergyOutput(1000);
+		changeEnergyOutput(survivalmod.SteamCount);
 		return true;
 	}
 	
 	private void changeEnergyOutput(int newOutput){
-		if(this.energyOutput != newOutput){
 			this.energyOutput = newOutput;
-
-			/*TileHeatExchanger tmpBoiler;
-			for(int i = 0; i< 4;  i++){
-				tmpBoiler=this.getBoiler(i);
-				if(tmpBoiler == null) continue;
-				tmpBoiler.updateFromMaster();
-			}*/
-				
-		}
 	}
 	
 	

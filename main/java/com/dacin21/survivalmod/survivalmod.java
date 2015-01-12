@@ -21,16 +21,12 @@ import net.minecraftforge.fluids.FluidRegistry;
 import com.dacin21.survivalmod.mob.EntityMath;
 import com.dacin21.survivalmod.mob.ProjectileMath;
 import com.dacin21.survivalmod.mob.RenderProjectileMath;
-import com.dacin21.survivalmod.reactor.block.BlockFusionReactor;
-import com.dacin21.survivalmod.reactor.block.BlockHeatExchanger;
-import com.dacin21.survivalmod.reactor.block.BlockNeutronBoiler;
 import com.dacin21.survivalmod.reactor.block.BlockSteamDistributor;
-import com.dacin21.survivalmod.reactor.block.TileFusionReactor;
-import com.dacin21.survivalmod.reactor.block.TileHeatExchanger;
 import com.dacin21.survivalmod.reactor.block.TileSteamDistributor;
-import com.dacin21.survivalmod.reactor.item.GasCell;
+import com.dacin21.survivalmod.reactor.producion.BlockElectrolyzer;
 import com.dacin21.survivalmod.reactor.producion.BlockHydroFluid;
 import com.dacin21.survivalmod.reactor.producion.BlockNeutronizer;
+import com.dacin21.survivalmod.reactor.producion.TileElectrolyzer;
 import com.dacin21.survivalmod.reactor.producion.TileNeutronizer;
 import com.dacin21.survivalmod.reactor.reactor.BlockFusionReactor2;
 import com.dacin21.survivalmod.reactor.reactor.BlockReactorWall;
@@ -38,8 +34,6 @@ import com.dacin21.survivalmod.reactor.reactor.BlockSteamPipe;
 import com.dacin21.survivalmod.reactor.reactor.TileFusionReactor2;
 import com.dacin21.survivalmod.reactor.reactor.TileReactorWall;
 import com.dacin21.survivalmod.reactor.reactor.TileSteamPipe;
-import com.dacin21.survivalmod.tileentityblock.BlockCentrifuge;
-import com.dacin21.survivalmod.tileentityblock.TileCentrifuge;
 import com.dacin21.survivalmod.turbine.block.BlockTurbineFluidport;
 import com.dacin21.survivalmod.turbine.block.BlockTurbineFrame;
 import com.dacin21.survivalmod.turbine.block.BlockTurbineGlass;
@@ -70,6 +64,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class survivalmod {
 
 	public static final String modid = "dacin_survivalmod";
+	
+	public static final int PlasmaCount = 50;
+	public static final int SteamCount = 1000;
+	public static final int EuPerSteam = 100;
 
 	public static Item fleshCluster;
 	public static Item solarBreaker;
@@ -78,14 +76,13 @@ public class survivalmod {
 	public static Item runicStaff;
 	public static Item runicStaffIcon;
 	public static ToolMaterial DoomTool;
-	public static Item hydrogenCell, deuteriumCell, tritiumCell;
 	public static Fluid deuteriumPlasma, tritiumPlasma, hydrogen;
 	public static Fluid steam;
 
 
 
-	public static Block infuserPit, centrifuge, fusionReactor, heatExchanger, neutronBoiler, steamDistributor;
-	public static Block fusionReactor2, reactorWall, steamPipe, neutronizer;
+	public static Block infuserPit, steamDistributor;
+	public static Block fusionReactor2, reactorWall, steamPipe, neutronizer, electrolyzer;
 	public static Block hFluidBlock, dFluidBlock, tFluidBlock;
 	public static Block turbineGlass, turbineFrame, turbinePowerport, turbineFluidport, turbineBase, turbineRotor;
 
@@ -160,9 +157,6 @@ public class survivalmod {
 		runicStaffIcon = new GenericItem("runicStaffIcon").setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:runicStaffIcon");
 
 
-		hydrogenCell = new GasCell("hydrogenCell").setTextureName("survivalmod:hydrogenCell");
-		deuteriumCell = new GasCell("deuteriumCell").setTextureName("survivalmod:deuteriumCell");
-		tritiumCell = new GasCell("tritiumCell").setTextureName("survivalmod:tritiumCell");
 
 
 
@@ -189,41 +183,30 @@ public class survivalmod {
 
 
 
-		centrifuge = new BlockCentrifuge().setHardness(1.0F).setStepSound(Block.soundTypeWood).setBlockName("centrifuge").setCreativeTab(tabDacin).setResistance(10.0F);
-		GameRegistry.registerBlock(centrifuge, "centrifuge");
-		GameRegistry.registerTileEntity(TileCentrifuge.class, modid + ".entity.centrifuge");
-
-		fusionReactor = new BlockFusionReactor().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("fusionReactor").setCreativeTab(tabDacin).setResistance(100.0F);
-		GameRegistry.registerBlock(fusionReactor, "fusionReaktor");
-		GameRegistry.registerTileEntity(TileFusionReactor.class, modid + ".entity.fusionReaktor");
-
-		fusionReactor2 = new BlockFusionReactor2().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("fusionReactor2").setCreativeTab(tabDacin).setResistance(100.0F);
+		
+		fusionReactor2 = new BlockFusionReactor2().setBlockName("fusionReactor2").setHardness(10.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(tabDacin).setResistance(100.0F);
 		GameRegistry.registerBlock(fusionReactor2, "fusionReaktor2");
 		GameRegistry.registerTileEntity(TileFusionReactor2.class, modid + ".entity.fusionReaktor2");
 
-		reactorWall = new BlockReactorWall().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("reactorWall").setCreativeTab(tabDacin).setResistance(100.0F);
+		reactorWall = new BlockReactorWall().setBlockName("reactorWall").setHardness(10.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(tabDacin).setResistance(100.0F);
 		GameRegistry.registerBlock(reactorWall, "reactorWall");
 		GameRegistry.registerTileEntity(TileReactorWall.class, modid + ".entity.reactorWall");
 
-		steamPipe = new BlockSteamPipe().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("steamPipe").setCreativeTab(tabDacin).setResistance(100.0F);
+		steamPipe = new BlockSteamPipe().setBlockName("steamPipe").setHardness(10.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(tabDacin).setResistance(100.0F);
 		GameRegistry.registerBlock(steamPipe, "steamPipe");
 		GameRegistry.registerTileEntity(TileSteamPipe.class, modid + ".entity.steamPipe");
 
-		neutronizer = new BlockNeutronizer().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("neutronizer").setCreativeTab(tabDacin).setResistance(100.0F);
+		neutronizer = new BlockNeutronizer().setBlockName("neutronizer").setHardness(10.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(tabDacin).setResistance(100.0F);
 		GameRegistry.registerBlock(neutronizer, "neutronizer");
 		GameRegistry.registerTileEntity(TileNeutronizer.class, modid + ".entity.neutronizer");
+		
+		electrolyzer = new BlockElectrolyzer().setBlockName("electrolyzer").setHardness(10.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(tabDacin).setResistance(100.0F);
+		GameRegistry.registerBlock(electrolyzer, "electrolyzer");
+		GameRegistry.registerTileEntity(TileElectrolyzer.class, modid + ".entity.electrolyzer");
+		
 
-
-
-		heatExchanger = new BlockHeatExchanger().setHardness(10.0F).setStepSound(Block.soundTypeMetal).setBlockName("heatExchanger").setCreativeTab(tabDacin).setResistance(100.0F);
-		GameRegistry.registerBlock(heatExchanger, "heatExchanger");
-		GameRegistry.registerTileEntity(TileHeatExchanger.class, modid + ".entity.heatExchanger");
-
-
-		neutronBoiler = new BlockNeutronBoiler().setHardness(20.0F).setStepSound(Block.soundTypeAnvil).setBlockName("neutronBoiler").setCreativeTab(tabDacin).setResistance(100.0F).setBlockTextureName("survivalmod:neutronBoiler");
-		GameRegistry.registerBlock(neutronBoiler, "neutronBoiler");
-
-		GameRegistry.addRecipe(new ItemStack(this.heatExchanger), "zzz", "xyx", "zzz",
+		
+		/*GameRegistry.addRecipe(new ItemStack(this.heatExchanger), "zzz", "xyx", "zzz",
 				'x', IC2Items.getItem("waterCell"), 'y', IC2Items.getItem("reactorVent"), 'z', IC2Items.getItem("plateiron"));
 
 		GameRegistry.addRecipe(new ItemStack(this.neutronBoiler), "aza", "yxy", "bbb",
@@ -231,7 +214,8 @@ public class survivalmod {
 
 		GameRegistry.addRecipe(new ItemStack(this.centrifuge), "wzw", "xyx", " z ",
 				'x', IC2Items.getItem("extractor"), 'y', IC2Items.getItem("advancedMachine"), 'z', IC2Items.getItem("advancedAlloy"), 'w', IC2Items.getItem("elemotor"));
-
+		 */
+		
 		steamDistributor = new BlockSteamDistributor().setHardness(20.0F).setStepSound(Block.soundTypeAnvil).setBlockName("steamDistributor").setCreativeTab(tabDacin).setResistance(100.0F).setBlockTextureName("survivalmod:steamDistributor");
 		GameRegistry.registerBlock(steamDistributor, "steamDistributor");
 		GameRegistry.registerTileEntity(TileSteamDistributor.class, modid + ".entity.steamDistributor");
@@ -310,13 +294,13 @@ public class survivalmod {
 	public static CreativeTabs tabDacin = new CreativeTabs("DacinMod") {
 		@Override
 		public ItemStack getIconItemStack() {
-			return new ItemStack(fusionReactor, 1, 0);
+			return new ItemStack(fusionReactor2, 1, 0);
 		}
 
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
-			return Item.getItemFromBlock(fusionReactor);
+			return Item.getItemFromBlock(fusionReactor2);
 		}
 	};
 

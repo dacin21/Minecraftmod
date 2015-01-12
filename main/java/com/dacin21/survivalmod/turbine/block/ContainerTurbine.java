@@ -1,5 +1,4 @@
-package com.dacin21.survivalmod.reactor.block;
-
+package com.dacin21.survivalmod.turbine.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -9,16 +8,23 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.tileentity.TileEntity;
 
-public class ContainerHeatExchanger extends Container
+public class ContainerTurbine extends Container
 {
-    private TileHeatExchanger tileHeatExchanger;
+    private TileTurbineRotorbase tileFusionReactor;
+    private TileEntity serv;
     private int lastItemBurnTime;
+    
+    public ContainerTurbine(InventoryPlayer par1Player, TileTurbineRotorbase par2Turbine,TileEntity par3Serv){
+    	this(par1Player, par2Turbine);
+    	this.serv = par3Serv;
+    }
 
-    public ContainerHeatExchanger(InventoryPlayer p_i1812_1_, TileHeatExchanger p_i1812_2_)
+    public ContainerTurbine(InventoryPlayer p_i1812_1_, TileTurbineRotorbase p_i1812_2_)
     {
-        this.tileHeatExchanger = p_i1812_2_;
+        this.tileFusionReactor = p_i1812_2_;
+        this.serv = null;
         int i;
 
         for (i = 0; i < 3; ++i)
@@ -39,7 +45,6 @@ public class ContainerHeatExchanger extends Container
     public void addCraftingToCrafters(ICrafting p_75132_1_)
     {
         super.addCraftingToCrafters(p_75132_1_);
-        p_75132_1_.sendProgressBarUpdate(this, 0, this.tileHeatExchanger.tank.getFluidAmount());
     }
 
     /**
@@ -50,16 +55,16 @@ public class ContainerHeatExchanger extends Container
     {
         super.detectAndSendChanges();
 
-        for (int i = 0; i < this.crafters.size(); ++i)
+        /*for (int i = 0; i < this.crafters.size(); ++i)
         {
             ICrafting icrafting = (ICrafting)this.crafters.get(i);
 
-            if (this.lastItemBurnTime != this.tileHeatExchanger.tank.getFluidAmount())
+            if (this.lastItemBurnTime != this.tileFusionReactor.fuelBurnTime)
             {
-                icrafting.sendProgressBarUpdate(this, 0, this.tileHeatExchanger.tank.getFluidAmount());
+                icrafting.sendProgressBarUpdate(this, 0, this.tileFusionReactor.fuelBurnTime);
             }
         }
-        this.lastItemBurnTime = this.tileHeatExchanger.tank.getFluidAmount();
+        this.lastItemBurnTime = this.tileFusionReactor.fuelBurnTime;*/
     }
 
     @SideOnly(Side.CLIENT)
@@ -67,58 +72,53 @@ public class ContainerHeatExchanger extends Container
     public void updateProgressBar(int p_75137_1_, int p_75137_2_)
     {
 
-        if (p_75137_1_ == 0)
-        {
-            this.tileHeatExchanger.tank.setFluid(new FluidStack(this.tileHeatExchanger.tank.getFluid(),p_75137_2_));
-            
-        }
     }
 
     @Override
     public boolean canInteractWith(EntityPlayer p_75145_1_)
     {
-        return this.tileHeatExchanger.isUseableByPlayer(p_75145_1_);
+    	if(serv == null){
+        return this.tileFusionReactor.isUseableByPlayer(p_75145_1_);
+    	}
+    	return this.isUseableByPlayer(p_75145_1_, serv);
     }
+    
+    private boolean isUseableByPlayer(EntityPlayer player, TileEntity entity) {
+		return entity.getWorldObj().getTileEntity(entity.xCoord, entity.yCoord,
+				entity.zCoord) != entity ? false : player.getDistanceSq(
+				(double) entity.xCoord + 0.5D, (double) entity.yCoord + 0.5D,
+				(double) entity.zCoord + 0.5D) <= 64.0D;
+	}
 
     /**
      * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
      */
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_)
+    public ItemStack transferStackInSlot(EntityPlayer par1Player, int par2Slot)
     {
         ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(p_82846_2_);
+        Slot slot = (Slot)this.inventorySlots.get(par2Slot);
 
         if (slot != null && slot.getHasStack())
         {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (p_82846_2_ == 2 ||p_82846_2_ == 3 )
+            if (par2Slot >= 0 && par2Slot < 27)
             {
-                if (!this.mergeItemStack(itemstack1, 4, 40, true))
-                {
-                    return null;
-                }
-
-                slot.onSlotChange(itemstack1, itemstack);
-            }
-            else if (p_82846_2_ != 1 && p_82846_2_ != 0)
-            {
-                
-                if (p_82846_2_ >= 4 && p_82846_2_ < 31)
-                {
-                    if (!this.mergeItemStack(itemstack1, 31, 40, false))
-                    {
-                        return null;
-                    }
-                }
-                else if (p_82846_2_ >= 31 && p_82846_2_ < 40 && !this.mergeItemStack(itemstack1, 4, 31, false))
+                if (!this.mergeItemStack(itemstack1, 27, 36, false))
                 {
                     return null;
                 }
             }
-            else if (!this.mergeItemStack(itemstack1, 4, 40, false))
+            else if (par2Slot >= 27 && par2Slot < 36)
+            {
+                if (!this.mergeItemStack(itemstack1, 0, 27, false))
+                {
+                    return null;
+                }
+            }
+            else if (!this.mergeItemStack(itemstack1, 0, 36, false))
             {
                 return null;
             }
@@ -137,11 +137,10 @@ public class ContainerHeatExchanger extends Container
                 return null;
             }
 
-            slot.onPickupFromSlot(p_82846_1_, itemstack1);
+            slot.onPickupFromSlot(par1Player, itemstack1);
         }
 
         return itemstack;
     }
 }
-
 

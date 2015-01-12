@@ -54,14 +54,14 @@ public class BlockTurbineFrame extends BlockContainer {
         }
         else
         {
-        	/*int[] mcoords = myTile.getMasterCoords();
-        	TileFusionReactor2 entity = ((TileFusionReactor2)par1World.getTileEntity(mcoords[0], mcoords[1], mcoords[2]));
+        	int[] mcoords = myTile.getMasterCoords();
+        	TileTurbineRotorbase entity = ((TileTurbineRotorbase)par1World.getTileEntity(mcoords[0], mcoords[1], mcoords[2]));
     		if(entity == null) return true;
     		if(entity.checkCompletion()){
-    			par5Player.openGui(survivalmod.instance,5 , par1World, x, y, z);
+    			par5Player.openGui(survivalmod.instance,2 , par1World, x, y, z);
     		} else {
     			System.err.print("Corrds of uninitialized Master foung! This is a BUG");
-    		}*/
+    		}
         	
         	return false;
         }

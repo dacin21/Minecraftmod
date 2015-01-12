@@ -66,7 +66,7 @@ public class BlockTurbineRotorbase extends BlockContainer {
 		if(entity == null) return true;
 		if(entity.checkCompletion()){
 			TileTurbineRotorbase inventory = (TileTurbineRotorbase) par1World.getTileEntity(x, y, z);
-			player.openGui(survivalmod.instance,5 , par1World, x, y, z);
+			player.openGui(survivalmod.instance,1 , par1World, x, y, z);
 		}
 		else {
 			entity.checkForMultiBlock();

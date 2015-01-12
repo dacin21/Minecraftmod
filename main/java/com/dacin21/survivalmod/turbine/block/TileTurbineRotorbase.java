@@ -21,7 +21,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileTurbineRotorbase extends TileEntity {
 	public FluidTank steamTank;
 	private boolean complete, burning;
-	private static final double energyOutput = 100;
+	private static final double energyOutput = survivalmod.EuPerSteam;
 	public double energyBuffer;
 	private int direction = -1;
 	public float frameCounter = 0.0f;
@@ -30,7 +30,7 @@ public class TileTurbineRotorbase extends TileEntity {
 
 	public TileTurbineRotorbase() {
 		complete = false;
-		steamTank = new FluidTank(survivalmod.steam, 0, 1000000);
+		steamTank = new FluidTank(survivalmod.steam, 0, survivalmod.SteamCount*10*2);
 		energyBuffer = 0;
 		burning = false;
 	}
@@ -336,9 +336,10 @@ public class TileTurbineRotorbase extends TileEntity {
 					break;
 			}
 			if(tmpTile!=null && tmpTile instanceof TileTurbineRotor){
-				TileTurbineRotor turbine = (TileTurbineRotor) tmpTile;
-				turbine.unloadMaster();
-				turbine.getWorldObj().markBlockForUpdate(turbine.xCoord, turbine.yCoord, turbine.zCoord);
+				TileTurbineRotor rotorTile = (TileTurbineRotor) tmpTile;
+				rotorTile.unloadMaster();
+				rotorTile.markDirty();
+				rotorTile.getWorldObj().markBlockForUpdate(rotorTile.xCoord, rotorTile.yCoord, rotorTile.zCoord);
 			}
 		}
 		this.burning = false;
@@ -373,8 +374,9 @@ public class TileTurbineRotorbase extends TileEntity {
 	}
 	
 	private boolean useFuel(){
-		if(steamTank.getFluidAmount() < 100) return false;
-		energyBuffer+=steamTank.drain(10000, true).amount * energyOutput;
+		if(steamTank.getFluidAmount() < 10) return false;
+		int steamAmount = steamTank.drain(steamTank.getCapacity(), false).amount/10;
+		energyBuffer+=steamTank.drain(steamAmount, true).amount * energyOutput;
 		
 		if(energyBuffer > 1000000){
 			energyBuffer = 1000000;

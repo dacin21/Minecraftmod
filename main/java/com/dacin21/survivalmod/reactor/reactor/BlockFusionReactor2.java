@@ -1,25 +1,19 @@
 package com.dacin21.survivalmod.reactor.reactor;
 
-import static net.minecraftforge.common.util.ForgeDirection.DOWN;
-
 import java.util.Random;
-
-import com.dacin21.survivalmod.survivalmod;
-import com.dacin21.survivalmod.tileentityblock.TileCentrifuge;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
+import com.dacin21.survivalmod.survivalmod;
 
 public class BlockFusionReactor2 extends BlockContainer {
 

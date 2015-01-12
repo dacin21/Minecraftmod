@@ -56,7 +56,7 @@ public class CraftingManagerInfuser
 			func_92051_a(new ItemStack(survivalmod.runicStaff),"    b", "  da ", " cad ", " ac  ", "e    ",
 					'a',Items.blaze_rod , 'b', Items.ender_pearl ,'c', Items.gold_ingot, 'd', Items.iron_ingot, 'e', Items.stick);
 			
-			func_92051_a(new ItemStack(survivalmod.fusionReactor), "ddddd", "debed", "dbabd", "debed", "ddcdd",
+			func_92051_a(new ItemStack(survivalmod.fusionReactor2), "ddddd", "debed", "dbabd", "debed", "ddcdd",
 					'a',IC2Items.getItem("reactorChamber") , 'b',IC2Items.getItem("teslaCoil") , 'c', IC2Items.getItem("evTransformer"), 'd', IC2Items.getItem("reactorReflectorThick") , 'e', IC2Items.getItem("inductionFurnace") );
 			
 			

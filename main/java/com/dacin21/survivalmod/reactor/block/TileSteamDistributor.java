@@ -45,7 +45,7 @@ public class TileSteamDistributor extends TileEntity implements ISidedInventory 
 			TileEntity steamOutput = this.worldObj.getTileEntity(xCoord + xOff, yCoord + yOff, zCoord + zOff);
 			if (steamOutput != null && steamOutput instanceof IFluidHandler) {
 				if (((IFluidHandler) steamInput).drain(directionIn, 2000, false) != null) {
-					((IFluidHandler) steamInput).drain(directionIn, ((IFluidHandler) steamOutput).fill(directionFillOut, ((IFluidHandler) steamInput).drain(directionIn, 2000, false), true), true);
+					((IFluidHandler) steamInput).drain(directionIn, ((IFluidHandler) steamOutput).fill(directionFillOut, ((IFluidHandler) steamInput).drain(directionIn, survivalmod.SteamCount, false), true), true);
 				}
 			}
 		}
