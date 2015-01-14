@@ -38,7 +38,7 @@ public class CraftingManagerInfuser
 	
 	
 			ItemStack fleshStack = new ItemStack(Items.rotten_flesh);
-			func_92051_a(new ItemStack(survivalmod.fleshCluster), "xx", "xx",
+			addInfuserShapedRecipe(new ItemStack(survivalmod.fleshCluster), "xx", "xx",
 	                'x', fleshStack);
 	
 			ItemStack swordD = new ItemStack(Items.diamond_sword);
@@ -50,13 +50,13 @@ public class CraftingManagerInfuser
 			ItemStack pearlEnder = new ItemStack(Items.ender_pearl);
 			ItemStack stoneEnder = new ItemStack(Blocks.end_stone);
 			
-			func_92051_a(new ItemStack(survivalmod.doomBlade), " gdg ","gdcdg","dcbcd","ecace","fcacf",
+			addInfuserShapedRecipe(new ItemStack(survivalmod.doomBlade), " gdg ","gdcdg","dcbcd","ecace","fcacf",
 	               'a', swordD,'b', saberNano,'c', Obsidian,'d', bucketLava,'e', blockRedstone,'f', pearlEnder,'g', stoneEnder);
 		
-			func_92051_a(new ItemStack(survivalmod.runicStaff),"    b", "  da ", " cad ", " ac  ", "e    ",
+			addInfuserShapedRecipe(new ItemStack(survivalmod.runicStaff),"    b", "  da ", " cad ", " ac  ", "e    ",
 					'a',Items.blaze_rod , 'b', Items.ender_pearl ,'c', Items.gold_ingot, 'd', Items.iron_ingot, 'e', Items.stick);
 			
-			func_92051_a(new ItemStack(survivalmod.fusionReactor2), "ddddd", "debed", "dbabd", "debed", "ddcdd",
+			addInfuserShapedRecipe(new ItemStack(survivalmod.fusionReactor2), "ddddd", "debed", "dbabd", "debed", "ddcdd",
 					'a',IC2Items.getItem("reactorChamber") , 'b',IC2Items.getItem("teslaCoil") , 'c', IC2Items.getItem("evTransformer"), 'd', IC2Items.getItem("reactorReflectorThick") , 'e', IC2Items.getItem("inductionFurnace") );
 			
 			
@@ -65,7 +65,11 @@ public class CraftingManagerInfuser
 	         System.out.println(this.recipes.size() + " recipes");
 	}
 	
-	public ShapedRecipesInfuser func_92051_a(ItemStack par1ItemStack, Object ... par2ArrayOfObj)
+	public static ShapedRecipesInfuser addRecipe(ItemStack par1ItemStack, Object... par2ArrayOfObj){
+		return getInstance().addInfuserShapedRecipe(par1ItemStack, par2ArrayOfObj);
+	}
+	
+	public ShapedRecipesInfuser addInfuserShapedRecipe(ItemStack par1ItemStack, Object ... par2ArrayOfObj)
 	{
 	         String var3 = "";
 	         int var4 = 0;

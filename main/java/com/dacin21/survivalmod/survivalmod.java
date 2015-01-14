@@ -2,6 +2,7 @@ package com.dacin21.survivalmod;
 
 import ic2.api.item.IC2Items;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -67,10 +68,10 @@ public class survivalmod {
 	
 	public static final int PlasmaCount = 50;
 	public static final int SteamCount = 1000;
-	public static final int EuPerSteam = 100;
+	public static final int EuPerSteam = 1000;
 
 	public static Item fleshCluster;
-	public static Item solarBreaker;
+	//public static Item solarBreaker;
 	public static Item nenderHeat;
 	public static Item doomBlade;
 	public static Item runicStaff;
@@ -78,6 +79,8 @@ public class survivalmod {
 	public static ToolMaterial DoomTool;
 	public static Fluid deuteriumPlasma, tritiumPlasma, hydrogen;
 	public static Fluid steam;
+	
+	public static ItemStack graviSuitMagnetron, graviSuitSuperconductor, graviSuitCoolingCore;
 
 
 
@@ -102,16 +105,33 @@ public class survivalmod {
 	@EventHandler
 	// used in 1.6.2
 	public void preInit(FMLPreInitializationEvent event) {
+		graviSuitMagnetron= graviSuitSuperconductor= graviSuitCoolingCore= new ItemStack(Item.getItemById(20));
 	}
 
 	@EventHandler
 	// used in 1.6.2
 	public void load(FMLInitializationEvent event) {
-
+		
 
 		srvHandler = (new survivalmodFuelHandler());
 		GameRegistry.registerFuelHandler(srvHandler);
-
+		
+		//Reflection hacks to get Gravisuit "Api"
+		Class<?> graviSuiteClass;
+		try {
+			graviSuiteClass = Class.forName("gravisuite.GraviSuite");
+			Object obj = graviSuiteClass.getField("magnetron").get(null);
+			if(obj!=null) graviSuitMagnetron = (ItemStack) obj;
+			Object obj2 = graviSuiteClass.getField("superConductor").get(null);
+			if(obj2!=null) graviSuitSuperconductor = (ItemStack) obj2;
+			Object obj3 = graviSuiteClass.getField("coolingCore").get(null);
+			if(obj3!=null) graviSuitCoolingCore = (ItemStack) obj3;
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+			graviSuitMagnetron = null;
+		}
+		//End of Reflection hacks
 		DoomTool = EnumHelper.addToolMaterial("DoomTool", 5, 3200, 12.0F, 35.0F, 10);
 		doItems();
 		doBlocks();
@@ -148,7 +168,7 @@ public class survivalmod {
 
 		nenderHeat = new GenericItem("nenderHeat").setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:nenderHeat");
 
-		solarBreaker = new GenericItem("solarBreaker").setMaxStackSize(64).setCreativeTab(tabDacin).setTextureName("survivalmod:solarBreaker");
+		//solarBreaker = new GenericItem("solarBreaker").setMaxStackSize(64).setCreativeTab(tabDacin).setTextureName("survivalmod:solarBreaker");
 
 
 		doomBlade = new DmSword(DoomTool).setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:doomBlade");
@@ -166,9 +186,10 @@ public class survivalmod {
 
 		// GameRegistry.addSmelting(solarBreaker,
 		// IC2Items.getItem("solarPanel"), 0.1f);
-		GameRegistry.addShapelessRecipe(new ItemStack(solarBreaker), Blocks.coal_block, Blocks.iron_block, Blocks.redstone_block, IC2Items.getItem("copperBlock"), IC2Items.getItem("hazmatBoots"), IC2Items.getItem("hazmatBoots"),
+		/*GameRegistry.addShapelessRecipe(new ItemStack(solarBreaker), Blocks.coal_block, Blocks.iron_block, Blocks.redstone_block, IC2Items.getItem("copperBlock"), IC2Items.getItem("hazmatBoots"), IC2Items.getItem("hazmatBoots"),
 				IC2Items.getItem("tinIngot"), IC2Items.getItem("tinIngot"), IC2Items.getItem("tinIngot"));
-
+		 */
+		
 		GameRegistry.addRecipe(new ItemStack(nenderHeat), "xzx", "yzy", "xzx",
 				'x', Blocks.redstone_block, 'y', Items.lava_bucket, 'z', Items.blaze_rod);
 	}
@@ -206,15 +227,22 @@ public class survivalmod {
 		
 
 		
-		/*GameRegistry.addRecipe(new ItemStack(this.heatExchanger), "zzz", "xyx", "zzz",
+		GameRegistry.addRecipe(new ItemStack(this.steamPipe, 28), "zzz", "xyx", "zzz",
 				'x', IC2Items.getItem("waterCell"), 'y', IC2Items.getItem("reactorVent"), 'z', IC2Items.getItem("plateiron"));
-
-		GameRegistry.addRecipe(new ItemStack(this.neutronBoiler), "aza", "yxy", "bbb",
-				'x', IC2Items.getItem("waterMill"), 'y', IC2Items.getItem("reactorReflector"), 'z', IC2Items.getItem("reactorCoolantSimple"), 'a', IC2Items.getItem("reactorHeatSwitch"), 'b', IC2Items.getItem("reactorPlating"));
-
-		GameRegistry.addRecipe(new ItemStack(this.centrifuge), "wzw", "xyx", " z ",
-				'x', IC2Items.getItem("extractor"), 'y', IC2Items.getItem("advancedMachine"), 'z', IC2Items.getItem("advancedAlloy"), 'w', IC2Items.getItem("elemotor"));
-		 */
+		GameRegistry.addRecipe(new ItemStack(this.reactorWall, 1), "yyy", "xzx", "yyy",
+				'x', IC2Items.getItem("reactorReflector"), 'y', IC2Items.getItem("reactorPlating"), 'z', IC2Items.getItem("magnetizer") );
+		GameRegistry.addRecipe(new ItemStack(this.fusionReactor2), "yxy", "wzw", "axa",
+				'x',IC2Items.getItem("reactorCoolantSix") , 'y',IC2Items.getItem("cell") , 'z', IC2Items.getItem("reactorChamber"),'w',  IC2Items.getItem("teslaCoil"), 'a', IC2Items.getItem("compressor"));
+		if(graviSuitMagnetron!= null){
+			GameRegistry.addRecipe(new ItemStack(this.neutronizer), "zyz", "xwx", "zyz",
+					'x', IC2Items.getItem("reactorReflectorThick"), 'y', IC2Items.getItem("centrifuge"), 'z', IC2Items.getItem("extractor"), 'w', graviSuitMagnetron);
+			
+		}
+		GameRegistry.addRecipe(new ItemStack(this.neutronizer), "zxz", "xyx", "zxz",
+				'x', IC2Items.getItem("reactorReflectorThick"), 'y', IC2Items.getItem("centrifuge"), 'z', IC2Items.getItem("extractor"));
+		
+		GameRegistry.addRecipe(new ItemStack(this.electrolyzer), "yxy", "w w", "zxz",
+				'x', IC2Items.getItem("teslaCoil"), 'y', IC2Items.getItem("pump"), 'z', Items.cauldron, 'w', IC2Items.getItem("electrolyzer"));
 		
 		steamDistributor = new BlockSteamDistributor().setHardness(20.0F).setStepSound(Block.soundTypeAnvil).setBlockName("steamDistributor").setCreativeTab(tabDacin).setResistance(100.0F).setBlockTextureName("survivalmod:steamDistributor");
 		GameRegistry.registerBlock(steamDistributor, "steamDistributor");
@@ -248,7 +276,23 @@ public class survivalmod {
 			GameRegistry.registerBlock(turbineFluidport, "turbineFluidport");
 			GameRegistry.registerTileEntity(TileTurbineFluidport.class, modid + ".entity.turbineFluidport");
 			
+			GameRegistry.addRecipe(new ItemStack(turbineFluidport), " z ", " x ", "y y",
+					'x', turbineFrame, 'y', IC2Items.getItem("compressor"), 'z', IC2Items.getItem("pump"));
 			
+			GameRegistry.addRecipe(new ItemStack(turbinePowerport), "yyy", " x ", "   ",
+					'x', turbineFrame, 'y', IC2Items.getItem("glassFiberCableItem"));
+			
+			CraftingManagerInfuser.addRecipe(new ItemStack(turbineBase), "bbbdb", "yyacb", "yxxxz", "yyacb", "bbbdb",
+					'x', turbineFrame, 'y', graviSuitCoolingCore, 'z', IC2Items.getItem("iridiumDrill"), 'a', IC2Items.getItem("advancedCircuit"), 'b', IC2Items.getItem("denseplateobsidian"), 'c', IC2Items.getItem("advancedMachine"), 'd', IC2Items.getItem("carbonPlate"));
+			
+			
+			GameRegistry.addRecipe(new ItemStack(turbineFrame), " y ", "yxy", " y ",
+					'x', IC2Items.getItem("reinforcedStone"), 'y', IC2Items.getItem("denseplateiron"));
+			GameRegistry.addRecipe(new ItemStack(turbineGlass), " y ", "yxy", " y ",
+					'x', IC2Items.getItem("reinforcedGlass"), 'y', IC2Items.getItem("denseplateiron"));
+			
+			CraftingManagerInfuser.addRecipe(new ItemStack(turbineRotor), " zyz ", " ywy ", "ywxwy", " ywy ", " zyz ",
+					'x', IC2Items.getItem("advancedMachine"), 'y', IC2Items.getItem("carbonPlate"), 'z', IC2Items.getItem("advancedAlloy"), 'w', IC2Items.getItem("generator"));
 	}
 
 	private void doMobs() {
