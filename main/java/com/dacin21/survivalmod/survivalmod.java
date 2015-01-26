@@ -2,7 +2,6 @@ package com.dacin21.survivalmod;
 
 import ic2.api.item.IC2Items;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -19,6 +18,9 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
+import com.dacin21.survivalmod.backpack.FunctionNBTChange;
+import com.dacin21.survivalmod.backpack.ItemBackpack;
+import com.dacin21.survivalmod.backpack.NBTRecipe;
 import com.dacin21.survivalmod.mob.EntityMath;
 import com.dacin21.survivalmod.mob.ProjectileMath;
 import com.dacin21.survivalmod.mob.RenderProjectileMath;
@@ -35,6 +37,10 @@ import com.dacin21.survivalmod.reactor.reactor.BlockSteamPipe;
 import com.dacin21.survivalmod.reactor.reactor.TileFusionReactor2;
 import com.dacin21.survivalmod.reactor.reactor.TileReactorWall;
 import com.dacin21.survivalmod.reactor.reactor.TileSteamPipe;
+import com.dacin21.survivalmod.teleStaff.EntityRune;
+import com.dacin21.survivalmod.teleStaff.ItemElectricRunicStaff;
+import com.dacin21.survivalmod.teleStaff.RenderRunic;
+import com.dacin21.survivalmod.teleStaff.RunicStaff;
 import com.dacin21.survivalmod.turbine.block.BlockTurbineFluidport;
 import com.dacin21.survivalmod.turbine.block.BlockTurbineFrame;
 import com.dacin21.survivalmod.turbine.block.BlockTurbineGlass;
@@ -74,9 +80,13 @@ public class survivalmod {
 	//public static Item solarBreaker;
 	public static Item nenderHeat;
 	public static Item doomBlade;
-	public static Item runicStaff;
+	public static Item runicStaff, electricRunicStaff;
 	public static Item runicStaffIcon;
+	
+	public static Item backpack;
+	
 	public static ToolMaterial DoomTool;
+	
 	public static Fluid deuteriumPlasma, tritiumPlasma, hydrogen;
 	public static Fluid steam;
 	
@@ -105,6 +115,7 @@ public class survivalmod {
 	@EventHandler
 	// used in 1.6.2
 	public void preInit(FMLPreInitializationEvent event) {
+		doFluids();
 		graviSuitMagnetron= graviSuitSuperconductor= graviSuitCoolingCore= new ItemStack(Item.getItemById(20));
 	}
 
@@ -135,7 +146,7 @@ public class survivalmod {
 		DoomTool = EnumHelper.addToolMaterial("DoomTool", 5, 3200, 12.0F, 35.0F, 10);
 		doItems();
 		doBlocks();
-		doFluids();
+		//doFluids();
 		doMobs();
 
 
@@ -168,27 +179,22 @@ public class survivalmod {
 
 		nenderHeat = new GenericItem("nenderHeat").setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:nenderHeat");
 
-		//solarBreaker = new GenericItem("solarBreaker").setMaxStackSize(64).setCreativeTab(tabDacin).setTextureName("survivalmod:solarBreaker");
-
 
 		doomBlade = new DmSword(DoomTool).setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:doomBlade");
 
 		runicStaff = new RunicStaff("runicStaff").setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:runicStaff");
+		electricRunicStaff = new ItemElectricRunicStaff("electricRunicStaff").setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:runicStaff");
 		runicStaffIcon = new GenericItem("runicStaffIcon").setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:runicStaffIcon");
 
-
-
+		backpack = new ItemBackpack("backpack");
+		NBTRecipe.addNBTRecipe(new ItemStack(backpack), FunctionNBTChange.BackpackBuildup,"xy", "yy",
+				'x', backpack, 'y', Blocks.chest);
 
 
 		GameRegistry.addRecipe(new ItemStack(fleshCluster), "xx", "xx",
 				'x', Items.rotten_flesh);
 		GameRegistry.addSmelting(fleshCluster, new ItemStack(Items.leather), 0.1f);
 
-		// GameRegistry.addSmelting(solarBreaker,
-		// IC2Items.getItem("solarPanel"), 0.1f);
-		/*GameRegistry.addShapelessRecipe(new ItemStack(solarBreaker), Blocks.coal_block, Blocks.iron_block, Blocks.redstone_block, IC2Items.getItem("copperBlock"), IC2Items.getItem("hazmatBoots"), IC2Items.getItem("hazmatBoots"),
-				IC2Items.getItem("tinIngot"), IC2Items.getItem("tinIngot"), IC2Items.getItem("tinIngot"));
-		 */
 		
 		GameRegistry.addRecipe(new ItemStack(nenderHeat), "xzx", "yzy", "xzx",
 				'x', Blocks.redstone_block, 'y', Items.lava_bucket, 'z', Items.blaze_rod);
@@ -298,7 +304,7 @@ public class survivalmod {
 	private void doMobs() {
 		EntityRegistry.registerGlobalEntityID(EntityMath.class, "Math", (modEntityID = EntityRegistry.findGlobalUniqueEntityId()), 3515848, 12102);
 		EntityRegistry.registerModEntity(EntityMath.class, "Math", modEntityID, this, 80, 3, true);
-		EntityRegistry.addSpawn(EntityMath.class, 50, 2, 6, EnumCreatureType.monster, BiomeGenBase.plains, BiomeGenBase.forest, BiomeGenBase.forestHills, BiomeGenBase.savanna, BiomeGenBase.taiga, BiomeGenBase.taigaHills);
+		EntityRegistry.addSpawn(EntityMath.class, 1, 2, 6, EnumCreatureType.monster, BiomeGenBase.plains, BiomeGenBase.forest, BiomeGenBase.forestHills, BiomeGenBase.savanna, BiomeGenBase.taiga, BiomeGenBase.taigaHills);
 		// LanguageRegistry.instance().addStringLocalization("entity.survivalmod.Math.name",
 		// "Math");
 
@@ -312,18 +318,34 @@ public class survivalmod {
 	private void doFluids() {
 		hydrogen = new Fluid("hydrogen").setDensity(1).setGaseous(true);
 		FluidRegistry.registerFluid(hydrogen);
+		hydrogen = FluidRegistry.getFluid("hydrogen");
+		
 		hFluidBlock = new BlockHydroFluid(hydrogen, Material.lava).setBlockName("hydrogenGas");
 		GameRegistry.registerBlock(hFluidBlock, "hydrogenGas");
+		if(hydrogen.getBlock() == null){
+			hydrogen.setBlock(hFluidBlock);
+		}
 
+		
 		tritiumPlasma = new Fluid("tritium_plasma").setDensity(2).setGaseous(true).setTemperature(100000000);
 		FluidRegistry.registerFluid(tritiumPlasma);
+		tritiumPlasma = FluidRegistry.getFluid("tritium_plasma");
+		
 		tFluidBlock = new BlockHydroFluid(tritiumPlasma, Material.lava).setBlockName("tritiumPlasma");
 		GameRegistry.registerBlock(tFluidBlock, "tritiumPlasma");
+		if(tritiumPlasma.getBlock() == null){
+			tritiumPlasma.setBlock(tFluidBlock);
+		}
 
 		deuteriumPlasma = new Fluid("deuterium_plasma").setDensity(3).setGaseous(true).setTemperature(100000001);
 		FluidRegistry.registerFluid(deuteriumPlasma);
+		deuteriumPlasma = FluidRegistry.getFluid("deuterium_plasma");
+		
 		dFluidBlock = new BlockHydroFluid(deuteriumPlasma, Material.lava).setBlockName("deuteriumPlasma");
 		GameRegistry.registerBlock(dFluidBlock, "deuteriumPlasma");
+		if(deuteriumPlasma.getBlock() == null){
+			tritiumPlasma.setBlock(dFluidBlock);
+		}
 
 	}
 

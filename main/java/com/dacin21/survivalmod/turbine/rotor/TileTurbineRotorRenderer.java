@@ -47,7 +47,20 @@ public class TileTurbineRotorRenderer extends TileEntitySpecialRenderer {
 		    	if(tileRotor.getMaster()!= null && tileRotor.getMaster().isBurning()){
 		    		float rotation = tileRotor.getMaster().frameCounter;
 		    		tileRotor.getMaster().frameCounter++;
-		    		GL11.glRotatef(rotation, 0.0F, 0.0F, 1.0F);
+		    		switch(tileRotor.direction){
+		    			case 0:
+				    		GL11.glRotatef(rotation, -1.0F, 0.0F, 0.0F);
+		    				break;
+		    			case 1:
+				    		GL11.glRotatef(rotation, 0.0F, 0.0F, 1.0F);
+				    		break;
+		    			case 2:
+				    		GL11.glRotatef(rotation, 1.0F, 0.0F, 0.0F);
+				    		break;
+		    			case 3:
+				    		GL11.glRotatef(rotation, 0.0F, 0.0F, -1.0F);
+				    		break;
+		    		}
 		    		GL11.glPushMatrix();
 		    		pushcount++;
 		    	}

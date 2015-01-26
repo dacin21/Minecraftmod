@@ -1,26 +1,33 @@
 package com.dacin21.survivalmod.reactor.producion;
 
-import com.dacin21.survivalmod.survivalmod;
-
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+
+import com.dacin21.survivalmod.survivalmod;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockHydroFluid extends BlockFluidClassic {
+	private MapColor color;
 
     @SideOnly(Side.CLIENT)
-    protected IIcon stillIconh,stillIcond,stillIcont;
+    public static IIcon stillIconh,stillIcond,stillIcont;
+    public static IIcon flowIconh,flowIcond,flowIcont;
    
     public BlockHydroFluid(Fluid fluid, Material material) {
             super(fluid, material);
             setCreativeTab(survivalmod.tabDacin);
+    }
+    @Override
+    public MapColor getMapColor(int index){
+    	return super.getMapColor(index);
     }
    
     @Override
@@ -28,6 +35,9 @@ public class BlockHydroFluid extends BlockFluidClassic {
 		if(this.density == survivalmod.hydrogen.getDensity()) return stillIconh;
 		if(this.density == survivalmod.deuteriumPlasma.getDensity()) return stillIcond;
 		if(this.density == survivalmod.tritiumPlasma.getDensity()) return stillIcont;
+		if(this.stack.getFluid().getID() == survivalmod.hydrogen.getID()) return stillIconh;
+		if(this.stack.getFluid().getID() == survivalmod.deuteriumPlasma.getID()) return stillIcond;
+		if(this.stack.getFluid().getID() == survivalmod.tritiumPlasma.getID()) return stillIcont;
 		return null;
             
     }
@@ -35,9 +45,14 @@ public class BlockHydroFluid extends BlockFluidClassic {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(IIconRegister register) {
-            stillIconh = register.registerIcon("survivalmod:fluidHydrogen");
-            stillIcond = register.registerIcon("survivalmod:fluidDeuterium");
-            stillIcont = register.registerIcon("survivalmod:fluidTritium");
+    		flowIconh = stillIconh = register.registerIcon("survivalmod:fluidHydrogen");
+    		flowIcond = stillIcond = register.registerIcon("survivalmod:fluidDeuterium");
+    		flowIcont = stillIcont = register.registerIcon("survivalmod:fluidTritium");
+    		
+    		survivalmod.hydrogen.setIcons(stillIconh);
+    		survivalmod.deuteriumPlasma.setIcons(stillIcond);
+    		survivalmod.tritiumPlasma.setIcons(stillIcont);
+            
     }
    
     @Override

@@ -1,5 +1,9 @@
-package com.dacin21.survivalmod;
+package com.dacin21.survivalmod.teleStaff;
 
+
+import com.dacin21.survivalmod.survivalmod;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 import ic2.api.item.IC2Items;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityEnderPearl;
@@ -9,11 +13,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class RunicStaff extends GenericEntityItem {
+public class RunicStaff extends Item  {
 	public RunicStaff(String unlocalizedName)
 	{
-	super(unlocalizedName);
-    this.setMaxDamage(9);
+		super();
+        setCreativeTab(survivalmod.tabDacin);
+		setUnlocalizedName(survivalmod.modid+ "_" + unlocalizedName);
+		GameRegistry.registerItem(this, survivalmod.modid+ "_" + unlocalizedName);
+	    this.setMaxDamage(9);
 	}
 	
 	/**

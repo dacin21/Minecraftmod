@@ -1,4 +1,4 @@
-package com.dacin21.survivalmod;
+package com.dacin21.survivalmod.teleStaff;
 
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.item.Item;

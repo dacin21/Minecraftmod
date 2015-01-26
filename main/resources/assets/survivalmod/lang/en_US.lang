@@ -29,6 +29,10 @@ item.dacin_survivalmod_deuteriumCell.name=Deuterium Cell
 item.dacin_survivalmod_tritiumCell.name=Tritium Cell
 itemGroup.DacinMod=Dacin's Mod
 
+fluid.hydrogen=Hydrogen Gas
+fluid.deuterium_plasma=Deuterium Plasma
+fluid.tritium_plasma=Tritium Plasma
+
 entity.survivalmod.Math.name=Math
 container.HeatExchanger.name=Heat Exchanger
 container.Fusionreaktor.name=Fusion Reactor

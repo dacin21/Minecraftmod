@@ -9,7 +9,7 @@ public class GenericItem extends Item {
 	public GenericItem(String unlocalizedName) {
         super();
         setMaxStackSize(64);
-        setCreativeTab(CreativeTabs.tabMisc);
+        setCreativeTab(survivalmod.tabDacin);
 		setUnlocalizedName(survivalmod.modid+ "_" + unlocalizedName);
 		GameRegistry.registerItem(this, survivalmod.modid+ "_" + unlocalizedName);
 	}

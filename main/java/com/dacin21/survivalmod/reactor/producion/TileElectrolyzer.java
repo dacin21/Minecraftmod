@@ -59,9 +59,10 @@ public class TileElectrolyzer extends TileEntity implements IEnergySink, IFluidH
 			if(this.hydrogenTank.getFluidAmount() > 10){
 				for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS){
 					tile = this.worldObj.getTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
-					if(tile!=null && tile instanceof IFluidHandler){
+					if(tile!=null && tile instanceof TileNeutronizer){
 						this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-						IFluidHandler handler = (IFluidHandler) tile;
+						this.worldObj.markBlockForUpdate(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
+						TileNeutronizer handler = (TileNeutronizer) tile;
 						this.hydrogenTank.drain(handler.fill(dir.getOpposite(), this.hydrogenTank.drain(survivalmod.PlasmaCount*2*2, false), true),true);
 					}
 				}
@@ -153,6 +154,7 @@ public class TileElectrolyzer extends TileEntity implements IEnergySink, IFluidH
 	@Override
 	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
 		energyBuffer+=amount;
+		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		if(energyBuffer < MaxEnergyBuffer){
 			return 0.0f;
 		}

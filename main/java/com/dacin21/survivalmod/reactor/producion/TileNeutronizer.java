@@ -150,7 +150,10 @@ public class TileNeutronizer extends TileEntity implements IEnergySink,IFluidHan
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (resource.getFluid().equals(survivalmod.hydrogen)) {
+		if(doFill){
+			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		if (resource.fluidID==survivalmod.hydrogen.getID()) {
 			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			return hTank.fill(resource, doFill);
 		}
@@ -160,6 +163,9 @@ public class TileNeutronizer extends TileEntity implements IEnergySink,IFluidHan
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource,
 			boolean doDrain) {
+		if(doDrain){
+			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
 		if (from.equals(ForgeDirection.DOWN)) {
 			if (resource.isFluidEqual(tTank.getFluid())) {
 				return tTank.drain(resource.amount, doDrain);
@@ -175,6 +181,9 @@ public class TileNeutronizer extends TileEntity implements IEnergySink,IFluidHan
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		if(doDrain){
+			this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
 		if (from.equals(ForgeDirection.DOWN)) {
 			return tTank.drain(maxDrain, doDrain);
 		}
@@ -183,7 +192,7 @@ public class TileNeutronizer extends TileEntity implements IEnergySink,IFluidHan
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid.equals(survivalmod.hydrogen);
+		return fluid.getID() == survivalmod.hydrogen.getID();
 	}
 
 	@Override
@@ -221,6 +230,7 @@ public class TileNeutronizer extends TileEntity implements IEnergySink,IFluidHan
 	@Override
 	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
 		energyBuffer+=amount;
+		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		if(energyBuffer < MaxEnergyBuffer){
 			return 0.0f;
 		}

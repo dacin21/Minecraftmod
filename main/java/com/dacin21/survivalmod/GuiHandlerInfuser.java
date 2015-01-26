@@ -5,6 +5,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import com.dacin21.survivalmod.backpack.ContainerBackpack;
+import com.dacin21.survivalmod.backpack.GuiBackpack;
 import com.dacin21.survivalmod.reactor.block.ContainerSteamDistributor;
 import com.dacin21.survivalmod.reactor.block.GuiSteamDistributor;
 import com.dacin21.survivalmod.reactor.block.TileSteamDistributor;
@@ -54,6 +56,10 @@ public class GuiHandlerInfuser implements IGuiHandler
 				return world.getBlock(x, y, z) == survivalmod.fusionReactor2 ? new ContainerFusionReactor2(player.inventory, (TileFusionReactor2) tile_entity) : null;
 			case 6:
 				return world.getBlock(x, y, z) == survivalmod.electrolyzer ? new ContainerElectrolyzer(player.inventory, (TileElectrolyzer)tile_entity) : null;
+				
+				
+			case 101:
+				return player.getHeldItem().getItem() == survivalmod.backpack ? new ContainerBackpack(player, player.getHeldItem()) :null;
 		}
 		return null;
 	}
@@ -86,6 +92,9 @@ public class GuiHandlerInfuser implements IGuiHandler
 			case 6: 
 				return world.getBlock(x, y, z) == survivalmod.electrolyzer ? new GuiElectrolyzer(player.inventory, (TileElectrolyzer)tile_entity) : null;
 				
+			case 101:
+				return player.getHeldItem().getItem() == survivalmod.backpack ? new GuiBackpack(player, player.getHeldItem()) :null;
+		
 		}
 		return null;
 	}

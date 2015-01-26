@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "Survivalmod",
+  "name": "Dacin21's Survivalmod",
+  "description": "First Modding attempt. Fusionreactor+Turbine",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["dacin21"],
+  "credits": "The Swiss Math Olympiad, for doing Maths",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
