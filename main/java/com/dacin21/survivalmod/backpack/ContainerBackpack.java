@@ -1,5 +1,7 @@
 package com.dacin21.survivalmod.backpack;
 
+import com.dacin21.survivalmod.survivalmod;
+
 import net.minecraft.crash.CrashReport;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -11,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ReportedException;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -35,25 +38,25 @@ public class ContainerBackpack extends Container {
 		{
 			for (int j = 0; j < 9; ++j)
 			{
-				this.addSlotToContainer(new Slot(par1Player.inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new SlotBackpackProtected(par1Player.inventory, j + i * 9 + 9, 8 + j * 18, 113 + i * 18));
 			}
 		}
 		//Hotbar
 		for (i = 0; i < 9; ++i)
 		{
-			this.addSlotToContainer(new Slot(par1Player.inventory, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new SlotBackpackProtected(par1Player.inventory, i, 8 + i * 18, 171));
 		}
 		// Backpack
 		for(i = 0; i < 9; i++){
-			for(int j=0; j < backpackInventory.getSizeInventory()/9; j++){
-				this.addSlotToContainer(new Slot(backpackInventory, i + j*9, 8 + i*18, 66 - j*18));
+			for(int j=0; j < 4; j++){
+				this.addSlotToContainer(new SlotBackpackProtected(backpackInventory, i + j*9, 8 + i*18, 75 - j*18));
 			}
 		}
 	}
 	
 	public void onContainerClosed(EntityPlayer player) {
 		backpackInventory.closeInventory();	
-	};
+	}
 
 
 	@Override
@@ -61,6 +64,19 @@ public class ContainerBackpack extends Container {
 	{
 		return true;
 	}
+	
+	public boolean enchantItem(EntityPlayer p_75140_1_, int id)
+    {
+    	switch(id){
+    	case 0: this.backpackInventory.scollGui(+1);
+				break;
+		case 1: this.backpackInventory.scollGui(-1);
+				break;
+		default: return false;
+    	}
+    	backpackInventory.markDirty();
+    	return true;
+    }
 
 	/**
 	 * Called when a player shift-clicks on a slot. You must override this or
@@ -76,6 +92,7 @@ public class ContainerBackpack extends Container {
 		{
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
+			if(itemstack.getItem() == survivalmod.backpack) return null;
 
 			if (par2Slot >= 0 && par2Slot < 36)
 			{

@@ -23,8 +23,13 @@ public class ItemBackpack extends Item {
 		setUnlocalizedName(survivalmod.modid+ "_" + unlocalizedName);
 		setMaxStackSize(1);
 		setCreativeTab(survivalmod.tabDacin);
-		setTextureName("survivalmod:doomBlade");
+		setTextureName("survivalmod:backpack");
 		GameRegistry.registerItem(this, survivalmod.modid+ "_" + unlocalizedName);
+	}
+	
+	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
+		this.onItemUse(par1ItemStack, par3EntityPlayer, par2World, par3EntityPlayer.serverPosX, par3EntityPlayer.serverPosY, par3EntityPlayer.serverPosZ, 0, 0.0f, 0.0f, 0.0f);
+		return par1ItemStack;
 	}
 	
 	@Override
@@ -40,14 +45,14 @@ public class ItemBackpack extends Item {
 	
 	private void initNBT(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer){
 		par1ItemStack.stackTagCompound = new NBTTagCompound();
-		par1ItemStack.stackTagCompound.setInteger("size", 1);
+		par1ItemStack.stackTagCompound.setInteger("size", 4);
+		par1ItemStack.stackTagCompound.setInteger("guiOffset", 0);
 		par1ItemStack.stackTagCompound.setInteger("ID", random.nextInt());
 
         NBTTagList nbttaglist = new NBTTagList();
-        for(int i=0 ;i<9;i++){
+        for(int i=0 ;i<26;i++){
         	 NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-        	 nbttagcompound1.setBoolean("hasItem", true);
-        	 //new ItemStack(Item.getItemById(i+10),5).writeToNBT(nbttagcompound1);
+        	 nbttagcompound1.setBoolean("hasItem", false);
         	 nbttaglist.appendTag(nbttagcompound1);
         }
         par1ItemStack.stackTagCompound.setTag("items", nbttaglist);

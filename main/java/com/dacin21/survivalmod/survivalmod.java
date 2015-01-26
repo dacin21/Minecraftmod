@@ -187,9 +187,10 @@ public class survivalmod {
 		runicStaffIcon = new GenericItem("runicStaffIcon").setMaxStackSize(1).setCreativeTab(tabDacin).setTextureName("survivalmod:runicStaffIcon");
 
 		backpack = new ItemBackpack("backpack");
-		NBTRecipe.addNBTRecipe(new ItemStack(backpack), FunctionNBTChange.BackpackBuildup,"xy", "yy",
-				'x', backpack, 'y', Blocks.chest);
-
+		NBTRecipe.addNBTRecipe(new ItemStack(backpack), FunctionNBTChange.BackpackBuildup," w ", "yxy","vzv",
+				'x', backpack, 'y', Blocks.chest, 'z', IC2Items.getItem("iridiumPlate"), 'w', Blocks.hopper, 'v', Items.string);
+		GameRegistry.addRecipe(new ItemStack(backpack), "vwv", "yxy", "zzz",
+				'x',Blocks.diamond_block, 'y', Blocks.chest, 'z', Blocks.lapis_block, 'w', Items.comparator, 'v', Blocks.quartz_block);
 
 		GameRegistry.addRecipe(new ItemStack(fleshCluster), "xx", "xx",
 				'x', Items.rotten_flesh);

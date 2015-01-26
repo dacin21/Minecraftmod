@@ -1,5 +1,7 @@
 package com.dacin21.survivalmod.backpack;
 
+import com.dacin21.survivalmod.survivalmod;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -76,14 +78,14 @@ public class InventoryBackpack implements IInventory {
 
 	@Override
 	public ItemStack getStackInSlot(int index) {
-		return content[index];
+		return content[index+scrollOffset()];
 	}
 
 	@Override
 	public ItemStack decrStackSize(int index, int amount) {
 		//read();
-		ItemStack ret = content[index].splitStack(amount);
-		if(content[index].stackSize <= 0) content[index] = null;
+		ItemStack ret = content[index+scrollOffset()].splitStack(amount);
+		if(content[index+scrollOffset()].stackSize <= 0) content[index+scrollOffset()] = null;
 		//write();
 		return ret;
 	}
@@ -91,13 +93,13 @@ public class InventoryBackpack implements IInventory {
 	@Override
 	public ItemStack getStackInSlotOnClosing(int index) {
 		read();
-		return content[index];
+		return content[index+scrollOffset()];
 	}
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		read();
-		content[index] = stack;
+		content[index+scrollOffset()] = stack;
 		write();
 
 	}
@@ -137,8 +139,26 @@ public class InventoryBackpack implements IInventory {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+	public boolean isItemValidForSlot(int slot, ItemStack p_94041_2_) {
 		return true;
+	}
+	
+	public void scollGui(int offset){
+		read();
+		int pos = this.BackpackStack.stackTagCompound.getInteger("guiOffset");
+		int maxpos = this.BackpackStack.stackTagCompound.getInteger("size") - 4;
+		pos+=offset;
+		if(pos < 0) pos = 0;
+		if(pos > maxpos) pos=maxpos;
+		this.BackpackStack.stackTagCompound.setInteger("guiOffset", pos);
+		write();
+	}
+	
+	public int scrollOffset(){
+		if(this.BackpackStack.stackTagCompound!=null){
+			return this.BackpackStack.stackTagCompound.getInteger("guiOffset")*9;
+		}
+		return 0;
 	}
 
 }

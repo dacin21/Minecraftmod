@@ -12,7 +12,7 @@ public class FunctionNBTChange {
 			for(int i=0;i<oldtags.length;i++){
 				if(oldtags[i]!= null && oldtags[i].getTagList("items", 10)!=null){
 					ret = (NBTTagCompound) oldtags[i].copy();
-					ret.setInteger("size", ret.getInteger("size")+1);
+					ret.setInteger("size", ret.getInteger("size")+4);
 					ret.setInteger("ID", ret.getInteger("ID"));
 
 					NBTTagList itemlist = (NBTTagList) oldtags[i].getTagList("items", 10).copy();

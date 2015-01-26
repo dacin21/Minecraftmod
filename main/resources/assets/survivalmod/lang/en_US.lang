@@ -27,6 +27,7 @@ item.dacin_survivalmod_runicStaffIcon.name=Icon of Rune (only used to register I
 item.dacin_survivalmod_hydrogenCell.name=Hydrogen Cell
 item.dacin_survivalmod_deuteriumCell.name=Deuterium Cell
 item.dacin_survivalmod_tritiumCell.name=Tritium Cell
+item.dacin_survivalmod_backpack.name=Super Awesome Backpack
 itemGroup.DacinMod=Dacin's Mod
 
 fluid.hydrogen=Hydrogen Gas
