@@ -56,6 +56,9 @@ public class CraftingManagerInfuser
 			addInfuserShapedRecipe(new ItemStack(survivalmod.runicStaff),"    b", "  da ", " cad ", " ac  ", "e    ",
 					'a',Items.blaze_rod , 'b', Items.ender_pearl ,'c', Items.gold_ingot, 'd', Items.iron_ingot, 'e', Items.stick);
 			
+			addInfuserShapedRecipe(new ItemStack(survivalmod.electricRunicStaff), "     ", "  a  ", " aba ", "cdcdc", " ece ",
+					'a', survivalmod.runicStaff, 'b', IC2Items.getItem("energyCrystal"), 'c', IC2Items.getItem("reactorVent"), 'd', IC2Items.getItem("reactorCoolantTriple"), 'e', survivalmod.nenderHeat);
+			
 			addInfuserShapedRecipe(new ItemStack(survivalmod.fusionReactor2), "ddddd", "debed", "dbabd", "debed", "ddcdd",
 					'a',IC2Items.getItem("reactorChamber") , 'b',IC2Items.getItem("teslaCoil") , 'c', IC2Items.getItem("evTransformer"), 'd', IC2Items.getItem("reactorReflectorThick") , 'e', IC2Items.getItem("inductionFurnace") );
 			

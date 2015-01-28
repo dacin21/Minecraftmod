@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 public class GuiInfuser extends GuiContainer
 {
     public static String GuiTexturePrefix= "survivalmod" + ":" + "textures/gui/";
-    private ResourceLocation survivalmod = new ResourceLocation(GuiTexturePrefix + "Infuser.png");
+    public static ResourceLocation infuserTextures = new ResourceLocation(GuiTexturePrefix + "Infuser.png");
     		
     public GuiInfuser(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5)
     {
@@ -42,7 +42,7 @@ public class GuiInfuser extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j)
     {
              GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-             mc.renderEngine.bindTexture(survivalmod);
+             mc.renderEngine.bindTexture(infuserTextures);
              int l = (width - xSize) / 2;
              int i1 = (height - ySize) / 2;
              drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);

@@ -12,8 +12,8 @@ import com.dacin21.survivalmod.survivalmod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemElectricRunicStaff extends Item implements IElectricItem {
-	private static final double maxEnergy = 1000.0f;
-	private static final double useEnergy=100.0f;
+	private static final double maxEnergy = 1000000.0f;
+	private static final double useEnergy=10000.0f;
 	public ItemElectricRunicStaff(String unlocalizedName)
 	{
 		super();
